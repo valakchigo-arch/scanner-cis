@@ -1,0 +1,20 @@
+rule_id: WIN-GUEST-DISABLED
+title: Guest Account Disabled
+category: authentication
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Windows Server 2019 2.3.1.5"
+severity: HIGH
+confidence: DIRECT
+condition:
+  operator: equals
+  expected_value: false
+probe:
+  provider: windows.powershell
+  params:
+    command: "(Get-LocalUser -Name 'Guest' -ErrorAction SilentlyContinue).Enabled"
+remediation:
+  action: "Disable Guest account via 'Local Users and Groups' or net user"
+description: >
+  Built-in Guest account must be disabled to prevent anonymous access.

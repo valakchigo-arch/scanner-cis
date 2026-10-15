@@ -1,0 +1,22 @@
+rule_id: WIN-FW-PRIVATE
+title: Windows Firewall Private Profile Enabled
+category: network_security
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.2.1 (L1)"
+  level: L1
+  severity: CRITICAL
+confidence: DIRECT
+condition:
+  operator: equals
+  expected_value: true
+probe:
+  provider: windows.powershell
+  params:
+    command: "Get-NetFirewallProfile -Name Private | Select-Object -ExpandProperty Enabled"
+remediation:
+  action: "Enable Windows Firewall Private profile via Group Policy or netsh"
+description: >
+  Windows Firewall Private profile must be enabled to block unauthorized
+  inbound connections on private networks (work/home).

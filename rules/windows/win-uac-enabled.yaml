@@ -1,0 +1,23 @@
+rule_id: WIN-UAC-ENABLED
+title: User Account Control (UAC) Enabled
+category: authorization
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.17.6 (L1)"
+  level: L1
+  severity: HIGH
+confidence: DIRECT
+condition:
+  operator: equals
+  expected_value: 1
+probe:
+  provider: windows.registry
+  params:
+    path: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+    key: EnableLUA
+remediation:
+  action: "Set EnableLUA to 1 in registry or via Group Policy"
+description: >
+  UAC must be enabled (EnableLUA=1) to enforce privilege separation
+  and prevent unauthorized elevation.

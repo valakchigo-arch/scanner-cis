@@ -1,0 +1,28 @@
+rule_id: WIN-PASS-COMPLEX
+title: Password Complexity Enabled
+category: authentication
+os: windows
+description: >
+  Password complexity must be enabled to require mixed character sets.
+  On domain-joined machines, secedit reflects the effective (domain) policy.
+  On standalone machines, it reflects local policy. Single source of truth.
+standard:
+  name: CIS
+  reference: "CIS Windows Server 2019 1.1.5"
+severity: HIGH
+confidence: DIRECT
+condition:
+  operator: equals
+  expected_value: 1
+probe:
+  provider: windows.powershell
+  params:
+    command: |
+      $tmp = "$env:TEMP\secpol_complex.inf"
+      secedit /export /cfg $tmp | Out-Null
+      (Get-Content $tmp | Select-String "^PasswordComplexity\s*=") -replace ".*=\s*", ""
+remediation:
+  action: >
+    Set via Group Policy: Computer Configuration > Windows Settings >
+    Security Settings > Account Policies > Password Policy >
+    "Password must meet complexity requirements" = Enabled.

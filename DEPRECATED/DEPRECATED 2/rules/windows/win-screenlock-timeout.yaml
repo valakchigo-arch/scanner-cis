@@ -1,0 +1,22 @@
+rule_id: WIN-SCREENLOCK-TIMEOUT
+title: Screen Saver Timeout <= 900 Seconds
+category: authentication
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Windows Server 2019 2.3.7.1"
+severity: MEDIUM
+confidence: DIRECT
+condition:
+  operator: lte
+  expected_value: 900
+probe:
+  provider: windows.registry
+  params:
+    path: "HKCU\\Control Panel\\Desktop"
+    key: ScreenSaveTimeOut
+remediation:
+  action: "Set ScreenSaveTimeOut to 900 or less (seconds) via Group Policy"
+description: >
+  Screen saver must activate within 15 minutes (900 seconds) of inactivity.
+  Missing key = no screen lock configured = FAIL.

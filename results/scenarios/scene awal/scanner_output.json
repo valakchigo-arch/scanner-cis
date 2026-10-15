@@ -1,0 +1,686 @@
+{
+  "contract_version": "2",
+  "scan_id": "linux-36ce738d-9d0c-4542-9691-f611e06fdd0e",
+  "source_ip": "192.168.1.18",
+  "hostname": "parrot",
+  "device_id": "dev-dff4e13f7c7e94ab",
+  "timestamp": "2026-10-13T04:18:06+00:00",
+  "severity": "Low",
+  "meta": {
+    "os_name": "Parrot GNU/Linux",
+    "os_version": "7.4",
+    "hostname": "parrot",
+    "hardening_index": 66,
+    "tests_executed": 278,
+    "tests_skipped": 188,
+    "scan_started_at": "2026-10-13T04:15:26.268882+00:00",
+    "scan_finished_at": "2026-10-13T04:18:06.579489+00:00"
+  },
+  "findings": [
+    {
+      "check_id": "LYNIS",
+      "description": "This release is more than 4 months old. Check the website or GitHub to see if there is an update available.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "LYNIS",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "DEB-0280",
+      "description": "Install libpam-tmpdir to set $TMP and $TMPDIR for PAM sessions",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DEB",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "DEB-0810",
+      "description": "Install apt-listbugs to display a list of critical bugs prior to each APT installation.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DEB",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "DEB-0811",
+      "description": "Install apt-listchanges to display any significant changes prior to any upgrade via APT.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DEB",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "DEB-0880",
+      "description": "Install fail2ban to automatically ban hosts that commit multiple authentication errors.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DEB",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "BOOT-5122",
+      "description": "Set a password on GRUB boot loader to prevent altering boot configuration (e.g. boot in single user mode without password)",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "BOOT",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "BOOT-5264",
+      "description": "Consider hardening system services",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "BOOT",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "KRNL-5820",
+      "description": "If not required, consider explicit disabling of core dump in /etc/security/limits.conf file",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "KRNL",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "AUTH-9230",
+      "description": "Configure password hashing rounds in /etc/login.defs",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "AUTH",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "AUTH-9262",
+      "description": "Install a PAM module for password strength testing like pam_cracklib or pam_passwdqc or libpam-passwdqc",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "AUTH",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "AUTH-9282",
+      "description": "When possible set expire dates for all password protected accounts",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "AUTH",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "AUTH-9286",
+      "description": "Configure minimum password age in /etc/login.defs",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "AUTH",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "AUTH-9286",
+      "description": "Configure maximum password age in /etc/login.defs",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "AUTH",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "AUTH-9328",
+      "description": "Default umask in /etc/login.defs could not be found and defaults usually to 022, which could be more strict like 027",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "AUTH",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "FILE-6310",
+      "description": "To decrease the impact of a full /var file system, place /var on a separate partition",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "FILE",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "USB-1000",
+      "description": "Disable drivers like USB storage when not used, to prevent unauthorized storage or data theft",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "USB",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "STRG-1846",
+      "description": "Disable drivers like firewire storage when not used, to prevent unauthorized storage or data theft",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "STRG",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "NAME-4028",
+      "description": "Check DNS configuration for the dns domain name",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "NAME",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "PKGS-7346",
+      "description": "Purge old/removed packages (2 found) with aptitude purge or dpkg --purge command. This will cleanup old configuration files, cron jobs and startup scripts.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "PKGS",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "PKGS-7370",
+      "description": "Install debsums utility for the verification of packages with known good database.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "PKGS",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "PKGS-7392",
+      "description": "Found one or more vulnerable packages.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "PKGS",
+      "finding_type": "warning"
+    },
+    {
+      "check_id": "PKGS-7392",
+      "description": "Update your system with apt-get update, apt-get upgrade, apt-get dist-upgrade and/or unattended-upgrades",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "PKGS",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "NETW-3200",
+      "description": "Determine if protocol 'dccp' is really needed on this system",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "NETW",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "NETW-3200",
+      "description": "Determine if protocol 'sctp' is really needed on this system",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "NETW",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "NETW-3200",
+      "description": "Determine if protocol 'rds' is really needed on this system",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "NETW",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "NETW-3200",
+      "description": "Determine if protocol 'tipc' is really needed on this system",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "NETW",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "FIRE-4513",
+      "description": "Check iptables rules to see which rules are currently not used",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "FIRE",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "MANUAL",
+      "description": "Verify if there is a formal process for testing and applying firewall rules",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "MANUAL",
+      "finding_type": "manual"
+    },
+    {
+      "check_id": "MANUAL",
+      "description": "Verify all traffic is filtered the right way between the different security zones",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "MANUAL",
+      "finding_type": "manual"
+    },
+    {
+      "check_id": "MANUAL",
+      "description": "Verify if a list is available with all required services",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "MANUAL",
+      "finding_type": "manual"
+    },
+    {
+      "check_id": "MANUAL",
+      "description": "Make sure an explicit deny all is the default policy for all unmatched traffic",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "MANUAL",
+      "finding_type": "manual"
+    },
+    {
+      "check_id": "HTTP-6640",
+      "description": "Install Apache mod_evasive to guard webserver against DoS/brute force attempts",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "HTTP",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "HTTP-6643",
+      "description": "Install Apache modsecurity to guard webserver against web application attacks",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "HTTP",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "DBS-1828",
+      "description": "PostgreSQL configuration file /etc/postgresql/17/main/start.conf is world readable and might leak sensitive details",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DBS",
+      "finding_type": "warning"
+    },
+    {
+      "check_id": "DBS-1828",
+      "description": "PostgreSQL configuration file /etc/postgresql/17/main/pg_ctl.conf is world readable and might leak sensitive details",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DBS",
+      "finding_type": "warning"
+    },
+    {
+      "check_id": "DBS-1828",
+      "description": "PostgreSQL configuration file /etc/postgresql/17/main/postgresql.conf is world readable and might leak sensitive details",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "DBS",
+      "finding_type": "warning"
+    },
+    {
+      "check_id": "PHP-2376",
+      "description": "Change the allow_url_fopen line to: allow_url_fopen = Off, to disable downloads via PHP",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "PHP",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "LOGG-2154",
+      "description": "Enable logging to an external logging host for archiving purposes and additional protection",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "LOGG",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "LOGG-2190",
+      "description": "Check what deleted files are still in use and why.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "LOGG",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "BANN-7126",
+      "description": "Add a legal banner to /etc/issue, to warn unauthorized users",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "BANN",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "BANN-7130",
+      "description": "Add legal banner to /etc/issue.net, to warn unauthorized users",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "BANN",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "ACCT-9622",
+      "description": "Enable process accounting",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "ACCT",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "ACCT-9626",
+      "description": "Enable sysstat to collect accounting (disabled)",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "ACCT",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "ACCT-9628",
+      "description": "Enable auditd to collect audit information",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "ACCT",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "TIME-3120",
+      "description": "Check ntpq peers output for unreliable ntp peers and correct/replace them",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "TIME",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "FINT-4350",
+      "description": "Install a file integrity tool to monitor changes to critical and sensitive files",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "FINT",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "TOOL-5002",
+      "description": "Determine if automation tools are present for system management",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "TOOL",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "FILE-7524",
+      "description": "Consider restricting file permissions",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "FILE",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "HOME-9304",
+      "description": "Double check the permissions of home directories as some might be not strict enough.",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "HOME",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Disable loading of TTY line disciplines",
+      "severity": null,
+      "detail_field": "dev.tty.ldisc_autoload",
+      "current_value": "1",
+      "recommended_value": "0",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Restrict FIFO special device creation behavior",
+      "severity": null,
+      "detail_field": "fs.protected_fifos",
+      "current_value": "1",
+      "recommended_value": "2",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Restrict core dumps",
+      "severity": null,
+      "detail_field": "fs.suid_dumpable",
+      "current_value": "2",
+      "recommended_value": "0",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Restrict access to kernel symbols",
+      "severity": null,
+      "detail_field": "kernel.kptr_restrict",
+      "current_value": "0",
+      "recommended_value": "2",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Restrict module loading once this sysctl value is loaded",
+      "severity": null,
+      "detail_field": "kernel.modules_disabled",
+      "current_value": "0",
+      "recommended_value": "1",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Disable magic SysRQ",
+      "severity": null,
+      "detail_field": "kernel.sysrq",
+      "current_value": "438",
+      "recommended_value": "0",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Restrict BPF for unprivileged users",
+      "severity": null,
+      "detail_field": "kernel.unprivileged_bpf_disabled",
+      "current_value": "2",
+      "recommended_value": "1",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Disable process tracing for everyone",
+      "severity": null,
+      "detail_field": "kernel.yama.ptrace_scope",
+      "current_value": "0",
+      "recommended_value": "1 2 3",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Hardened BPF JIT compilation",
+      "severity": null,
+      "detail_field": "net.core.bpf_jit_harden",
+      "current_value": "0",
+      "recommended_value": "2",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Disable IP source routing",
+      "severity": null,
+      "detail_field": "net.ipv4.conf.all.forwarding",
+      "current_value": "1",
+      "recommended_value": "0",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Log all packages for which the host does not have a path back to the source",
+      "severity": null,
+      "detail_field": "net.ipv4.conf.all.log_martians",
+      "current_value": "0",
+      "recommended_value": "1",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Enforce ingress/egress filtering for packets",
+      "severity": null,
+      "detail_field": "net.ipv4.conf.all.rp_filter",
+      "current_value": "0",
+      "recommended_value": "1",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Disable/Ignore ICMP routing redirects",
+      "severity": null,
+      "detail_field": "net.ipv4.conf.all.send_redirects",
+      "current_value": "1",
+      "recommended_value": "0",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "Log all packages for which the host does not have a path back to the source",
+      "severity": null,
+      "detail_field": "net.ipv4.conf.default.log_martians",
+      "current_value": "0",
+      "recommended_value": "1",
+      "category": "KRNL",
+      "finding_type": "sysctl_mismatch"
+    },
+    {
+      "check_id": "KRNL-6000",
+      "description": "One or more sysctl values differ from the scan profile and could be tweaked",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "KRNL",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "HRDN-7222",
+      "description": "Harden compilers like restricting access to root user only",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "HRDN",
+      "finding_type": "suggestion"
+    },
+    {
+      "check_id": "HRDN-7230",
+      "description": "Harden the system by installing at least one malware scanner, to perform periodic file system scans",
+      "severity": null,
+      "detail_field": null,
+      "current_value": null,
+      "recommended_value": null,
+      "category": "HRDN",
+      "finding_type": "suggestion"
+    }
+  ],
+  "scanner": {
+    "name": "geo-threat-scanner",
+    "os": "linux",
+    "version": "2.0.0"
+  }
+}

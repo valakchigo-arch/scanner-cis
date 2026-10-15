@@ -1,0 +1,54 @@
+cd /d C:\geothread
+mkdir results 2>nul
+set OUT=results\independent_check.txt
+
+echo === FIREWALL === > %OUT%
+netsh advfirewall show allprofiles state >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === FIREWALL PS === >> %OUT%
+powershell -NoProfile -Command "Get-NetFirewallProfile | Select Name, Enabled | Format-Table -AutoSize" >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === SMB1 === >> %OUT%
+powershell -NoProfile -Command "Get-SmbServerConfiguration | Select EnableSMB1Protocol | Format-Table -AutoSize" >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === DEFENDER === >> %OUT%
+powershell -NoProfile -Command "Get-MpComputerStatus | Select RealTimeProtectionEnabled, AntivirusEnabled | Format-Table -AutoSize" >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === GUEST === >> %OUT%
+net user guest >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === PASSWORD POLICY === >> %OUT%
+net accounts >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === SECEDIT POLICY === >> %OUT%
+powershell -NoProfile -Command "$tmp = \"$env:TEMP\secpol_verify.inf\"; secedit /export /cfg $tmp | Out-Null; Get-Content $tmp | Select-String '^(MinimumPasswordLength|LockoutBadCount|PasswordComplexity)'" >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === REMOTE REGISTRY === >> %OUT%
+sc qc RemoteRegistry >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === RDP NLA === >> %OUT%
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v UserAuthentication >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === UAC === >> %OUT%
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === LMHASH === >> %OUT%
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NoLMHash >> %OUT% 2>&1
+
+echo. >> %OUT%
+echo === SCREENLOCK === >> %OUT%
+reg query "HKCU\Control Panel\Desktop" /v ScreenSaveTimeOut >> %OUT% 2>&1
+
+echo.
+echo SELESAI! Buka: %OUT%
+notepad %OUT%

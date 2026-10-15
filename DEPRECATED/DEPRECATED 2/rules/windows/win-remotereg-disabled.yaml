@@ -1,0 +1,26 @@
+rule_id: WIN-REMOTEREG-DISABLED
+title: Remote Registry Service Disabled
+category: services
+os: windows
+description: >
+  Remote Registry service allows remote modification of registry.
+  Should be set to Disabled (Start=4) unless explicitly required for
+  administration.
+standard:
+  name: CIS
+  reference: "CIS Windows Server 2019 5.30"
+severity: MEDIUM
+confidence: DIRECT
+condition:
+  operator: equals
+  expected_value: 4
+probe:
+  provider: windows.registry
+  params:
+    path: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RemoteRegistry"
+    key: "Start"
+remediation:
+  action: >
+    Set service to Disabled:
+    Set-Service -Name RemoteRegistry -StartupType Disabled
+    Or: sc.exe config RemoteRegistry start= disabled

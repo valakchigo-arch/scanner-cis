@@ -1,0 +1,435 @@
+{
+  "label": "after_minlen_8",
+  "hostname": "VALAK",
+  "os": "Windows-11-10.0.26200-SP0",
+  "is_admin": true,
+  "timestamp": "20261014T135059Z",
+  "counts": {
+    "PASS": 10,
+    "FAIL": 4,
+    "ERROR": 0
+  },
+  "findings": [
+    {
+      "finding_id": "live-after_minlen_8-001",
+      "control_id": "WIN-ACCT-LOCKOUT",
+      "title": "Account Lockout Threshold 1 to 5 Attempts",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:49.633300+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 1.2.1"
+      },
+      "description": "Account lockout must trigger after 1-5 failed logon attempts. Value 0 means \"never lock\" which allows unlimited brute-force attempts and must FAIL. Values greater than 5 also fail this control.\n",
+      "comparison": {
+        "operator": "in",
+        "expected": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "actual": "10"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "$tmp = \"$env:TEMP\\secpol_lockout.inf\"\nsecedit /export /cfg $tmp | Out-Null\n(Get-Content $tmp | Select-String \"^LockoutBadCount\\s*=\") -replace \".*=\\s*\", \"\"\n",
+        "observed": "10"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Windows Settings > Security Settings > Account Policies > Account Lockout Policy > \"Account lockout threshold\" = 5 or fewer (but not 0)."
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-002",
+      "control_id": "WIN-DEFENDER-ENABLED",
+      "title": "Windows Defender Antivirus Enabled",
+      "category": "compromise_indicators",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:50.857458+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 10.1.1"
+      },
+      "description": "Windows Defender real-time monitoring must be enabled. Note: command returns False when protection IS enabled (DisableRealtimeMonitoring=False).",
+      "comparison": {
+        "operator": "equals",
+        "expected": false,
+        "actual": "False"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "(Get-MpPreference).DisableRealtimeMonitoring",
+        "observed": "False"
+      },
+      "remediation": {
+        "action": "Enable Windows Defender real-time protection"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-003",
+      "control_id": "WIN-FW-DOMAIN",
+      "title": "Windows Firewall Domain Profile Enabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:52.220096+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 9.1.1"
+      },
+      "description": "Windows Firewall must be enabled for the Domain profile to block unauthorized inbound connections on domain-joined endpoints.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": true,
+        "actual": "True"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-NetFirewallProfile -Name Domain | Select-Object -ExpandProperty Enabled",
+        "observed": "True"
+      },
+      "remediation": {
+        "action": "Enable Windows Firewall for Domain profile via Group Policy (Computer Configuration > Windows Settings > Security Settings > Windows Firewall with Advanced Security) or: Set-NetFirewallProfile -Name Domain -Enabled True"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-004",
+      "control_id": "WIN-FW-PRIVATE",
+      "title": "Windows Firewall Private Profile Enabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:53.336445+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 9.1.2"
+      },
+      "description": "Windows Firewall Private profile must be enabled to block unauthorized inbound connections on private networks (work/home).",
+      "comparison": {
+        "operator": "equals",
+        "expected": true,
+        "actual": "True"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-NetFirewallProfile -Name Private | Select-Object -ExpandProperty Enabled",
+        "observed": "True"
+      },
+      "remediation": {
+        "action": "Enable Windows Firewall Private profile via Group Policy or netsh"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-005",
+      "control_id": "WIN-FW-PUBLIC",
+      "title": "Windows Firewall Public Profile Enabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:54.458097+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 9.1.3"
+      },
+      "description": "Windows Firewall Public profile must be enabled to block unauthorized inbound connections on public networks.",
+      "comparison": {
+        "operator": "equals",
+        "expected": true,
+        "actual": "True"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-NetFirewallProfile -Name Public | Select-Object -ExpandProperty Enabled",
+        "observed": "True"
+      },
+      "remediation": {
+        "action": "Enable Windows Firewall Public profile via Group Policy or netsh"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-006",
+      "control_id": "WIN-GUEST-DISABLED",
+      "title": "Guest Account Disabled",
+      "category": "authentication",
+      "status": "PASS",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:54.809267+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 2.3.1.5"
+      },
+      "description": "Built-in Guest account must be disabled to prevent anonymous access.",
+      "comparison": {
+        "operator": "equals",
+        "expected": false,
+        "actual": "False"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "(Get-LocalUser -Name 'Guest' -ErrorAction SilentlyContinue).Enabled",
+        "observed": "False"
+      },
+      "remediation": {
+        "action": "Disable Guest account via 'Local Users and Groups' or net user"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-007",
+      "control_id": "WIN-LMHASH-DISABLED",
+      "title": "LM Hash Storage Disabled",
+      "category": "cryptography",
+      "status": "PASS",
+      "severity": "HIGH",
+      "confidence": "INFERRED",
+      "timestamp": "2026-10-14T13:50:55.181920+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 2.3.11.6"
+      },
+      "description": "LM hash must be disabled. NoLMHash=1 or missing key (modern Windows default) = PASS. NoLMHash=0 = LM hash enabled = FAIL.",
+      "comparison": {
+        "operator": "not_in",
+        "expected": [
+          0,
+          "0"
+        ],
+        "actual": "1"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa",
+        "key": "NoLMHash",
+        "observed": "1"
+      },
+      "remediation": {
+        "action": "Set NoLMHash to 1 in registry to explicitly disable LM hash storage"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-008",
+      "control_id": "WIN-PASS-COMPLEX",
+      "title": "Password Complexity Enabled",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:55.948048+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 1.1.5"
+      },
+      "description": "Password complexity must be enabled to require mixed character sets. On domain-joined machines, secedit reflects the effective (domain) policy. On standalone machines, it reflects local policy. Single source of truth.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": 1,
+        "actual": "0"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "$tmp = \"$env:TEMP\\secpol_complex.inf\"\nsecedit /export /cfg $tmp | Out-Null\n(Get-Content $tmp | Select-String \"^PasswordComplexity\\s*=\") -replace \".*=\\s*\", \"\"\n",
+        "observed": "0"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Windows Settings > Security Settings > Account Policies > Password Policy > \"Password must meet complexity requirements\" = Enabled."
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-009",
+      "control_id": "WIN-PASS-MINLEN",
+      "title": "Minimum Password Length 14 Characters or More",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:56.651192+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 1.1.4"
+      },
+      "description": "Minimum password length must be at least 14 characters to resist brute-force and dictionary attacks. Value is read from the effective local security policy via secedit export.\n",
+      "comparison": {
+        "operator": "gte",
+        "expected": 14,
+        "actual": "8"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "$tmp = \"$env:TEMP\\secpol_minlen.inf\"\nsecedit /export /cfg $tmp | Out-Null\n(Get-Content $tmp | Select-String \"^MinimumPasswordLength\\s*=\") -replace \".*=\\s*\", \"\"\n",
+        "observed": "8"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Windows Settings > Security Settings > Account Policies > Password Policy > \"Minimum password length\" = 14 or more. Or via secedit /configure with a custom INF."
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-010",
+      "control_id": "WIN-RDP-NLA",
+      "title": "RDP Network Level Authentication Required",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:57.062924+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 18.9.63.1"
+      },
+      "description": "RDP must require Network Level Authentication (NLA) to prevent unauthenticated access to the login screen and reduce RDP attack surface.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": 1,
+        "actual": "1"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp",
+        "key": "UserAuthentication",
+        "observed": "1"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Security > \"Require user authentication for remote connections by using Network Level Authentication\" = Enabled. Or set registry UserAuthentication = 1."
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-011",
+      "control_id": "WIN-REMOTEREG-DISABLED",
+      "title": "Remote Registry Service Disabled",
+      "category": "services",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:57.497102+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 5.30"
+      },
+      "description": "Remote Registry service allows remote modification of registry. Should be set to Disabled (Start=4) unless explicitly required for administration.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": 4,
+        "actual": "4"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RemoteRegistry",
+        "key": "Start",
+        "observed": "4"
+      },
+      "remediation": {
+        "action": "Set service to Disabled: Set-Service -Name RemoteRegistry -StartupType Disabled Or: sc.exe config RemoteRegistry start= disabled"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-012",
+      "control_id": "WIN-SCREENLOCK-TIMEOUT",
+      "title": "Screen Saver Timeout <= 900 Seconds",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "MEDIUM",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:57.880189+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 2.3.7.1"
+      },
+      "description": "Screen saver must activate within 15 minutes (900 seconds) of inactivity. Missing key = no screen lock configured = FAIL.",
+      "comparison": {
+        "operator": "lte",
+        "expected": 900,
+        "actual": null
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKCU\\Control Panel\\Desktop",
+        "key": "ScreenSaveTimeOut",
+        "observed": null,
+        "note": "value_not_present"
+      },
+      "remediation": {
+        "action": "Set ScreenSaveTimeOut to 900 or less (seconds) via Group Policy"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-013",
+      "control_id": "WIN-SMB1-DISABLED",
+      "title": "SMBv1 Protocol Disabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:58.939121+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 9.2.1"
+      },
+      "description": "SMBv1 is deprecated and vulnerable (EternalBlue, WannaCry). Must be disabled on all endpoints.",
+      "comparison": {
+        "operator": "equals",
+        "expected": "Disabled",
+        "actual": "Disabled"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol | Select-Object -ExpandProperty State",
+        "observed": "Disabled"
+      },
+      "remediation": {
+        "action": "Disable SMBv1 via 'Turn Windows features on or off' or PowerShell"
+      },
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_minlen_8-014",
+      "control_id": "WIN-UAC-ENABLED",
+      "title": "User Account Control (UAC) Enabled",
+      "category": "authorization",
+      "status": "PASS",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-14T13:50:59.363383+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Windows Server 2019 2.3.1.3"
+      },
+      "description": "UAC must be enabled (EnableLUA=1) to enforce privilege separation and prevent unauthorized elevation.",
+      "comparison": {
+        "operator": "equals",
+        "expected": 1,
+        "actual": "1"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "key": "EnableLUA",
+        "observed": "1"
+      },
+      "remediation": {
+        "action": "Set EnableLUA to 1 in registry or via Group Policy"
+      },
+      "error_detail": null
+    }
+  ]
+}

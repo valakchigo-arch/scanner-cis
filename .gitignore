@@ -1,0 +1,12 @@
+# --- RAHASIA / data mesin: jangan pernah di-commit ---
+scanner/.env
+scanner/scanner.env
+*.env
+!scanner/scanner.env.example
+results/*.json
+results/*.txt
+# --- artefak ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/

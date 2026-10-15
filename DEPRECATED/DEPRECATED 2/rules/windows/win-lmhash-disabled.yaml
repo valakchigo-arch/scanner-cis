@@ -1,0 +1,22 @@
+rule_id: WIN-LMHASH-DISABLED
+title: LM Hash Storage Disabled
+category: cryptography
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Windows Server 2019 2.3.11.6"
+severity: HIGH
+confidence: INFERRED
+condition:
+  operator: not_in
+  expected_value: [0, "0"]
+probe:
+  provider: windows.registry
+  params:
+    path: "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa"
+    key: NoLMHash
+remediation:
+  action: "Set NoLMHash to 1 in registry to explicitly disable LM hash storage"
+description: >
+  LM hash must be disabled. NoLMHash=1 or missing key (modern Windows default) = PASS.
+  NoLMHash=0 = LM hash enabled = FAIL.

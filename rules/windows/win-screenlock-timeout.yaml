@@ -1,0 +1,42 @@
+rule_id: WIN-SCREENLOCK-TIMEOUT
+title: "Interactive Logon: Machine Inactivity Limit <= 900 Seconds"
+category: authentication
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.7.4 (L1)"
+  level: L1
+severity: MEDIUM
+confidence: DIRECT
+condition:
+  operator: matches
+  expected_value: "^([1-9]\\d?|[1-8]\\d\\d|900)$"
+probe:
+  provider: windows.registry
+  params:
+    path: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+    key: "InactivityTimeoutSecs"
+remediation:
+  action: >
+    Set "Interactive logon: Machine inactivity limit" to 900 seconds or less
+    via Group Policy (Computer Configuration > Administrative Templates >
+    Windows Components > Windows Logon Options) or set registry
+    HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\InactivityTimeoutSecs
+    to a value in 1..900.
+description: >
+  The machine inactivity limit must trigger a screen lock within 15 minutes
+  (900 seconds). The probe reads the effective machine-wide policy value
+  InactivityTimeoutSecs under HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System.
+
+  Boundary semantics (verified by test, see tests/rules/test_win_screenlock_timeout.py):
+  - 0 is NOT acceptable — it means "no limit" — so the regex deliberately
+    rejects 0. The previous `lte 900` operator accepted 0 (True <= 900).
+  - 1..900 = PASS; 901+ = FAIL; key absent = FAIL (unconfigured).
+
+  SCOPE NOTE: this is the MACHINE-WIDE (HKLM) policy key. The earlier rule
+  read HKCU\Control Panel\Desktop\ScreenSaveTimeOut, which is per-user and
+  was verified responsive on live machines (1800 readable). It was replaced
+  because (a) CIS 2.3.7.4 names the machine inactivity limit, and (b) HKCU
+  reflects only the account running the scanner, not the policy applied to
+  other users. Baseline machines where the key is absent report FAIL, which
+  is the correct finding for an unconfigured control.

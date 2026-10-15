@@ -1,0 +1,21 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+scanner/.env
+scanner/scanner.env
+
+# Local scan output / spool
+scanner/spool/
+*.log
+
+# Build/package artifacts
+.dist/
+build/

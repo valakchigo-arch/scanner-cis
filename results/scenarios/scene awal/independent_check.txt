@@ -1,0 +1,127 @@
+=== FIREWALL === 
+
+Domain Profile Settings: 
+----------------------------------------------------------------------
+State                                 ON
+
+Private Profile Settings: 
+----------------------------------------------------------------------
+State                                 ON
+
+Public Profile Settings: 
+----------------------------------------------------------------------
+State                                 ON
+Ok.
+
+ 
+=== FIREWALL PS === 
+
+Name    Enabled
+----    -------
+Domain     True
+Private    True
+Public     True
+
+
+ 
+=== SMB1 === 
+
+EnableSMB1Protocol
+------------------
+             False
+
+
+ 
+=== DEFENDER === 
+
+RealTimeProtectionEnabled AntivirusEnabled
+------------------------- ----------------
+                     True             True
+
+
+ 
+=== GUEST === 
+User name                    Guest
+Full Name                    
+Comment                      Built-in account for guest access to the computer/domain
+User's comment               
+Country/region code          000 (System Default)
+Account active               No
+Account expires              Never
+
+Password last set            10/12/2026 11:15:43 PM
+Password expires             Never
+Password changeable          10/12/2026 11:15:43 PM
+Password required            No
+User may change password     No
+
+Workstations allowed         All
+Logon script                 
+User profile                 
+Home directory               
+Last logon                   Never
+
+Logon hours allowed          All
+
+Local Group Memberships      *Guests               
+Global Group memberships     *None                 
+The command completed successfully.
+
+ 
+=== PASSWORD POLICY === 
+Force user logoff how long after time expires?:       Never
+Minimum password age (days):                          0
+Maximum password age (days):                          42
+Minimum password length:                              0
+Length of password history maintained:                None
+Lockout threshold:                                    10
+Lockout duration (minutes):                           10
+Lockout observation window (minutes):                 10
+Computer role:                                        WORKSTATION
+The command completed successfully.
+
+ 
+=== SECEDIT POLICY === 
+
+MinimumPasswordLength = 0
+PasswordComplexity = 0
+LockoutBadCount = 10
+
+
+ 
+=== REMOTE REGISTRY === 
+[SC] QueryServiceConfig SUCCESS
+
+SERVICE_NAME: RemoteRegistry
+        TYPE               : 20  WIN32_SHARE_PROCESS 
+        START_TYPE         : 4   DISABLED
+        ERROR_CONTROL      : 1   NORMAL
+        BINARY_PATH_NAME   : C:\Windows\system32\svchost.exe -k localService -p
+        LOAD_ORDER_GROUP   : 
+        TAG                : 0
+        DISPLAY_NAME       : Remote Registry
+        DEPENDENCIES       : RPCSS
+        SERVICE_START_NAME : NT AUTHORITY\LocalService
+ 
+=== RDP NLA === 
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp
+    UserAuthentication    REG_DWORD    0x1
+
+ 
+=== UAC === 
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+    EnableLUA    REG_DWORD    0x1
+
+ 
+=== LMHASH === 
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa
+    NoLMHash    REG_DWORD    0x1
+
+ 
+=== SCREENLOCK === 
+
+
+ERROR: The system was unable to find the specified registry key or value.
