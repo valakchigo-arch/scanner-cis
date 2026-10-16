@@ -6,7 +6,7 @@ standard:
   name: CIS
   reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.11.5 (L1)"
   level: L1
-  severity: HIGH
+severity: HIGH
 confidence: INFERRED
 condition:
   operator: not_in

@@ -56,14 +56,14 @@ Catatan membaca tabel: "Kondisi PASS" adalah nilai mentah yang lolos, bukan sela
 WIN-LMHASH memakai `not_in [0]`: kunci **tidak ada** dianggap PASS karena Windows modern tidak menyimpan LM hash secara bawaan.
 
 ## 6. Bukti empiris
-Lihat **`docs/VALIDATION_RESULTS.md`**: 18 run pada 2 mesin (Windows 11 fisik, Windows 10 VM) dengan perturbation testing
+Lihat **`docs/VALIDATION_RESULTS.md`**: 18 run pada 2 mesin (Windows 10 fisik, Windows 10 VM) dengan perturbation testing
 — tabel sensitivitas, apa yang terbukti/belum, dan pengukuran kinerja (VM 10–30× lebih lambat; 6 probe timeout → ERROR, bukan FAIL palsu).
 Pada Windows bawaan, empat kontrol akun/kata sandi gagal konsisten (MinLen=0, Complexity=0, Lockout=10, ScreenLock tidak diatur); Host-B juga memiliki SMBv1 aktif.
 
 ## 7. Ancaman terhadap validitas (tulis di Bab Pembahasan)
 1. **Cakupan terbatas**: 14 kontrol terkurasi ≠ CIS Benchmark penuh; Linux = indeks Lynis, bukan CIS.
 2. **Heuristik severity Linux** (warning/sysctl/saran) bukan skor standar.
-3. **Baseline kecil**: 3 host Windows 11 standalone; tidak mewakili server domain.
+3. **Baseline kecil**: 3 host Windows 10 standalone; tidak mewakili server domain.
 4. **Ground truth**: `results/independent_check.txt` memverifikasi manual — pertahankan sebagai validasi eksternal.
 5. **Lokalisasi**: scanner legacy membaca `net accounts` (bahasa Inggris); rule engine memakai `secedit` (netral bahasa).
 6. **Waktu eksekusi bergantung mesin**: VM lambat menghasilkan ERROR (bukan FAIL); atur `SCANNER_PROBE_TIMEOUT_SCALE`.

@@ -1,7 +1,7 @@
 # Hasil Uji Validasi Live (18 run, 2 mesin)
 
 Pengujian dilakukan **dengan kode sebelum patch** (rule engine asli + `run_rules_live.py`) pada dua mesin.
-Hostname dianonimkan: **Host-A** = Windows 11 (build 26200, mesin fisik); **Host-B** = Windows 10 (build 19045, VM).
+Hostname dianonimkan: **Host-A** = Windows 10 (build fisik, mesin pengujian); **Host-B** = Windows 10 (build 19045, VM).
 Metode: *perturbation / sensitivity testing* — satu setelan diubah, scan dijalankan, setelan dikembalikan (rollback), scan diulang.
 
 ## 1. Tabel sensitivitas (nilai terbaca → status)

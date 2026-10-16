@@ -7,7 +7,8 @@ description: >
   unauthorized inbound connections on domain-joined endpoints.
 standard:
   name: CIS
-  reference: "CIS Windows Server 2019 9.1.1"
+  reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.1.1 (L1)"
+  level: L1
 severity: CRITICAL
 confidence: DIRECT
 condition:
