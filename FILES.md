@@ -29,3 +29,27 @@
 
 ## SUMMARY
 Total: 17 file modified/added (15 rules updated + 3 docs/tests updated + 6 new test/harness files). pytest: **278 passed, 0 failed** (≥223). No forbidden strings "Server 2019"/"CIS Windows Server" in rules (verified via updated references). Gate A passed. Phase B (live Windows validation B1–B7) belum dijalankan di lingkungan ini (memerlukan Windows + admin + snapshot).
+
+## NEW (Fase A + B)
+- `tests/test_forbidden_strings.py` — Gate A criterion 2 (forbidden-string guard)
+- `tests/test_cis_references.py` — B3 exact-match reference mapping (14 rules)
+- `docs/MUTATION_CHECK.md` — B2 mutation evidence (4 mutations, RED→GREEN)
+- `tests/scenario_harness.py` — P1-2 data-driven scenario runner
+- `tests/test_scenario_harness.py` — P1-2 harness tests
+- `archive/architecture-pre-v4.md` — historical pre-v4.0.0 architecture dump
+
+## REPLACE (Fase A)
+- `rules/windows/win-screenlock-timeout.yaml` — P0-2 (HKLM InactivityTimeoutSecs + matches)
+- `rules/windows/win-smb1-disabled.yaml` — P0-3 (confidence INFERRED)
+- `rules/windows/*.yaml` (12 files) — P0-1 (reference v4.0.0)
+- `docs/METHODOLOGY.md` — P2 (tabel rule + Win11 → Host-A)
+- `docs/VALIDATION_RESULTS.md` — P2 (hostname anonim)
+- `pytest.ini` — `--import-mode=importlib` (fix module collision)
+- `scanner/core/evaluator.py` — P1-1 (None guard untuk matches/contains)
+- `.gitignore` — `tmp/`, `__pycache__/`, `*.pyc`
+
+## TINDAKAN
+- `scanner/tests/__init__.py` — dihapus (fix module collision)
+- `docs/architecture.md` — dipindah ke `archive/architecture-pre-v4.md`
+- `tmp/` — untracked dari git
+- `DEPRECATED/` — di-track (aman, hanya placeholder; rekomendasi untrack setelah Fase B selesai)
