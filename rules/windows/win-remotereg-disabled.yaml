@@ -10,7 +10,7 @@ standard:
   name: CIS
   reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 5.26 (L2)"
   level: L2
-  severity: MEDIUM
+severity: MEDIUM
 confidence: DIRECT
 condition:
   operator: equals
