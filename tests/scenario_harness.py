@@ -345,3 +345,122 @@ def default_scenarios() -> list[Scenario]:
                  1800, None, "FAIL", "1800",
                  "30 minutes = FAIL"),
     ]
+# === P1-3 EXTENSION (appended 2026-10-19) =====================================
+# Provides SeceditTarget + PowerShellTarget + CompositeTarget + extended_scenarios().
+import subprocess as _sp
+import tempfile as _tf
+
+@dataclass
+class SeceditTarget:
+    def _export(self) -> str:
+        p = Path(_tf.gettempdir()) / "secpol_export.inf"
+        _sp.run(["secedit", "/export", "/cfg", str(p)], capture_output=True, check=True)
+        return p.read_text(encoding="utf-16", errors="replace")
+
+    def read(self, spec: dict) -> Any:
+        fname = spec["field"]
+        for line in self._export().splitlines():
+            s = line.strip()
+            if s.startswith(fname):
+                return s.partition("=")[2].strip()
+        return None
+
+    def write(self, spec: dict, value: Any) -> None:
+        fname = spec["field"]
+        out = []
+        found = False
+        for line in self._export().splitlines():
+            if line.strip().startswith(fname):
+                out.append(f"{fname} = {value}")
+                found = True
+            else:
+                out.append(line)
+        if not found:
+            out.append(f"{fname} = {value}")
+        mod = Path(_tf.gettempdir()) / "secpol_mod.inf"
+        mod.write_text("\r\n".join(out), encoding="utf-16")
+        sdb = Path(_tf.gettempdir()) / "secpol.sdb"
+        _sp.run(["secedit", "/configure", "/db", str(sdb), "/cfg", str(mod), "/areas", "SECURITYPOLICY"], capture_output=True, check=True)
+
+    def delete(self, spec: dict) -> None:
+        self.write(spec, 0)
+
+    def describe(self) -> str:
+        return "secedit"
+
+@dataclass
+class PowerShellTarget:
+    _calls: list = field(default_factory=list)
+    def _run(self, cmd: str) -> str:
+        self._calls.append(cmd)
+        r = _sp.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", cmd], capture_output=True, text=True, check=True)
+        return r.stdout.strip()
+    def read(self, spec: dict) -> Any:
+        c, a = spec["cmdlet"], spec.get("args", {})
+        if c == "Get-NetFirewallProfile":
+            return self._run(f"(Get-NetFirewallProfile -Name {a.get('name','Domain')}).Enabled")
+        if c == "Get-MpPreference":
+            return self._run("(Get-MpPreference).DisableRealtimeMonitoring")
+        if c == "Get-WindowsOptionalFeature":
+            return self._run(f"(Get-WindowsOptionalFeature -Online -FeatureName {a.get('name','SMB1Protocol')}).State")
+        raise ValueError(c)
+    def write(self, spec: dict, value: Any) -> None:
+        c = spec.get("set_cmdlet", spec["cmdlet"].replace("Get-", "Set-"))
+        a = spec.get("args", {})
+        if c == "Set-NetFirewallProfile":
+            self._run(f"Set-NetFirewallProfile -Name {a.get('name','Domain')} -Enabled ${{'True' if value else 'False'}}".replace('value', str(value)) if False else f"Set-NetFirewallProfile -Name {a.get('name','Domain')} -Enabled {'True' if value in ('True', True) else 'False'}")
+        elif c == "Set-MpPreference":
+            self._run(f"Set-MpPreference -DisableRealtimeMonitoring ${'False' if value else 'True'}")
+        elif c in ("Enable-WindowsOptionalFeature", "Disable-WindowsOptionalFeature"):
+            n = a.get("name", "SMB1Protocol")
+            self._run(f"{c} -Online -FeatureName {n} -NoRestart -Confirm:$false")
+        else:
+            raise ValueError(c)
+    def delete(self, spec: dict) -> None:
+        pass
+    def describe(self) -> str:
+        return "powershell"
+
+@dataclass
+class CompositeTarget:
+    registry: Any = field(default_factory=DictTarget)
+    secedit: Any = None
+    powershell: Any = None
+    def _pick(self, spec: dict) -> Any:
+        k = spec.get("kind", "registry")
+        if k == "secedit":
+            if not self.secedit: raise RuntimeError("SeceditTarget unavailable (Windows-only)")
+            return self.secedit
+        if k == "powershell":
+            if not self.powershell: raise RuntimeError("PowerShellTarget unavailable (Windows-only)")
+            return self.powershell
+        return self.registry
+    def read(self, spec): return self._pick(spec).read(spec)
+    def write(self, spec, v): return self._pick(spec).write(spec, v)
+    def delete(self, spec): return self._pick(spec).delete(spec)
+    def describe(self): return f"composite(reg={self.registry.describe()})"
+
+def extended_scenarios() -> list:
+    SL = {"path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", "key": "InactivityTimeoutSecs"}
+    COMPLEX = {"kind": "secedit", "field": "PasswordComplexity"}
+    MINLEN = {"kind": "secedit", "field": "MinimumPasswordLength"}
+    LOCKOUT = {"kind": "secedit", "field": "LockoutBadCount"}
+    DEFENDER = {"kind": "powershell", "cmdlet": "Get-MpPreference"}
+    FW_DOMAIN = {"kind": "powershell", "cmdlet": "Get-NetFirewallProfile", "args": {"name": "Domain"}, "set_cmdlet": "Set-NetFirewallProfile"}
+    SMB1 = {"kind": "powershell", "cmdlet": "Get-WindowsOptionalFeature", "args": {"name": "SMB1Protocol"}, "set_cmdlet": "Enable-WindowsOptionalFeature"}
+    return [
+        Scenario("screenlock_900_pass", "WIN-SCREENLOCK-TIMEOUT", SL, 900, None, "PASS", "900"),
+        Scenario("screenlock_901_fail", "WIN-SCREENLOCK-TIMEOUT", SL, 901, None, "FAIL", "901"),
+        Scenario("screenlock_0_fail",   "WIN-SCREENLOCK-TIMEOUT", SL, 0,   None, "FAIL", "0"),
+        Scenario("screenlock_600_pass", "WIN-SCREENLOCK-TIMEOUT", SL, 600, None, "PASS", "600"),
+        Scenario("screenlock_1800_fail","WIN-SCREENLOCK-TIMEOUT", SL, 1800,None, "FAIL", "1800"),
+        Scenario("complexity_1_pass",   "WIN-PASS-COMPLEX",      COMPLEX,"1",None,"PASS","1"),
+        Scenario("minlen_13_fail",      "WIN-PASS-MINLEN",       MINLEN,"13",None,"FAIL","13"),
+        Scenario("minlen_14_pass",      "WIN-PASS-MINLEN",       MINLEN,"14",None,"PASS","14"),
+        Scenario("lockout_5_pass",      "WIN-ACCT-LOCKOUT",      LOCKOUT,"5",None,"PASS","5"),
+        Scenario("lockout_6_fail",      "WIN-ACCT-LOCKOUT",      LOCKOUT,"6",None,"FAIL","6"),
+        Scenario("defender_off_fail",   "WIN-DEFENDER-ENABLED",  DEFENDER,False,None,"FAIL","True"),
+        Scenario("fw_domain_off_fail",  "WIN-FW-DOMAIN",         FW_DOMAIN,False,None,"FAIL","False"),
+        Scenario("smb1_on_fail",        "WIN-SMB1-DISABLED",     SMB1,"Enabled",None,"FAIL","Enabled"),
+    ]
+# === END P1-3 EXTENSION =======================================================

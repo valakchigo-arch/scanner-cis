@@ -80,3 +80,45 @@ def test_default_scenarios_cover_p1_3_matrix():
     assert "screenlock_0_fail" in names
     assert "screenlock_600_pass" in names
     assert "screenlock_1800_fail" in names
+# === P1-3 EXTENSION TESTS (appended 2026-10-19) ==============================
+
+def test_extended_scenarios_structure():
+    from tests.scenario_harness import extended_scenarios
+    scenarios = extended_scenarios()
+    assert len(scenarios) == 13
+    names = [s.name for s in scenarios]
+    required = ["complexity_1_pass", "minlen_13_fail", "minlen_14_pass",
+                "lockout_5_pass", "lockout_6_fail", "defender_off_fail",
+                "fw_domain_off_fail", "smb1_on_fail"]
+    for r in required:
+        assert r in names
+
+def test_composite_target_rejects_unavailable_kind():
+    import pytest as _pytest
+    from tests.scenario_harness import CompositeTarget
+    t = CompositeTarget()
+    with _pytest.raises(RuntimeError, match="SeceditTarget unavailable"):
+        t.read({"kind": "secedit", "field": "PasswordComplexity"})
+    with _pytest.raises(RuntimeError, match="PowerShellTarget unavailable"):
+        t.read({"kind": "powershell", "cmdlet": "Get-MpPreference"})
+
+def test_composite_target_with_mock_secedit():
+    from tests.scenario_harness import CompositeTarget
+
+    class _MockSecedit:
+        def __init__(self): self.store = {}
+        def read(self, s): return self.store.get(s["field"])
+        def write(self, s, v): self.store[s["field"]] = v
+        def delete(self, s): self.store.pop(s["field"], None)
+        def describe(self): return "mock-secedit"
+
+    mock = _MockSecedit()
+    t = CompositeTarget(secedit=mock)
+    t.write({"kind": "secedit", "field": "PasswordComplexity"}, "1")
+    assert t.read({"kind": "secedit", "field": "PasswordComplexity"}) == "1"
+
+def test_default_scenarios_unchanged():
+    from tests.scenario_harness import default_scenarios
+    assert len(default_scenarios()) == 5
+    assert all(s.control_id == "WIN-SCREENLOCK-TIMEOUT" for s in default_scenarios())
+# === END P1-3 EXTENSION TESTS ================================================
