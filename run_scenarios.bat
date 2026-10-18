@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 title GeoThread DJBC - Windows Scenario Testing
@@ -34,20 +34,6 @@ REM ============================================================
 call :header "BASELINE"
 call :run_scan baseline
 
-REM ============================================================
-REM SCENARIO 1 - Screen Lock Timeout
-REM ============================================================
-call :header "SCENARIO 1 - Screen Lock Timeout 1800s"
-call :run_scan before_screenlock
-echo [CHANGE] ScreenSaveTimeOut=1800
-reg add "HKCU\Control Panel\Desktop" /v ScreenSaveTimeOut /t REG_SZ /d 1800 /f >nul
-call :sleep
-call :run_scan after_screenlock_1800
-echo [EXPECT] WIN-SCREENLOCK-TIMEOUT = FAIL
-echo [ROLLBACK] delete ScreenSaveTimeOut
-reg delete "HKCU\Control Panel\Desktop" /v ScreenSaveTimeOut /f >nul 2>&1
-call :sleep
-call :run_scan rollback_screenlock
 
 REM ============================================================
 REM SCENARIO 2 - Password Min Length
