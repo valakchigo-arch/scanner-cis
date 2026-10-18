@@ -1,4 +1,13 @@
-﻿# Mutation Check Evidence (Gate A criterion 3 + B2)
+﻿> **AUDIT NOTICE — EXEMPT FROM FORBIDDEN-STRING SCAN.**
+> Dokumen ini sengaja memuat string `"Server 2019"` dan `"Windows 11"` sebagai
+> bagian dari **dokumentasi fix** (menjelaskan string apa yang dihapus).
+> String-string ini bukan klaim, melainkan rujukan historis ke defect yang
+> sudah diperbaiki. File ini di-allowlist di `tests/test_forbidden_strings.py`
+> via `EXCLUDE_FILES`. Setiap perubahan isi file ini harus di-review manual
+> untuk memastikan tidak ada **klaim aktif** (coverage/alignment) yang
+> menyelinap masuk.
+
+# Mutation Check Evidence (Gate A criterion 3 + B2)
 
 Dokumen ini membuktikan bahwa setiap bug yang diperbaiki memiliki test yang
 **gagal di kode sebelum fix** dan **lulus di kode setelah fix**. Semua mutation

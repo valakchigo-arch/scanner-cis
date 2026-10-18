@@ -5,6 +5,12 @@ import pytest
 FORBIDDEN_ANYWHERE = ("Server 2019", "Windows 11", "CIS-compliant")
 EXCLUDE_DIRS = ("archive/", "DEPRECATED/", "results/", "tmp/")
 
+# File yang sengaja memuat string terlarang karena MENDOKUMENTASIKAN fix-nya
+# sendiri (audit trail). Setiap penambahan wajib lewat code review.
+EXCLUDE_FILES = frozenset({
+    "docs/MUTATION_CHECK.md",  # mendokumentasikan mutation yang me-revert forbidden strings
+})
+
 
 def _iter_files(root: Path):
     for p in root.rglob("*"):
@@ -12,6 +18,8 @@ def _iter_files(root: Path):
             continue
         rel = str(p).replace("\\", "/")
         if any(ex in rel for ex in EXCLUDE_DIRS):
+            continue
+        if rel in EXCLUDE_FILES:
             continue
         if p.suffix not in (".py", ".yaml", ".yml", ".md", ".txt"):
             continue
