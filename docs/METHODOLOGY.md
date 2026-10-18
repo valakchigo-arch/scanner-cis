@@ -36,34 +36,34 @@ TLS diverifikasi default; spool atomik 0600/0700; `-EncodedCommand` + escape lit
 ## 5. Katalog kontrol (dihasilkan dari YAML)
 | Rule ID | Kategori | Severity | Kondisi PASS | Sumber nilai | Referensi CIS (verifikasi!) |
 |---|---|---|---|---|---|
-| `WIN-ACCT-LOCKOUT` | authentication | HIGH | `in [1, 2, 3, 4, 5]` | powershell: (perintah PowerShell) | CIS Windows Server 2019 1.2.1 |
-| `WIN-DEFENDER-ENABLED` | compromise_indicators | CRITICAL | `equals False` | powershell: (perintah PowerShell) | CIS Windows Server 2019 10.1.1 |
-| `WIN-FW-DOMAIN` | network_security | CRITICAL | `equals True` | powershell: (perintah PowerShell) | CIS Windows Server 2019 9.1.1 |
-| `WIN-FW-PRIVATE` | network_security | CRITICAL | `equals True` | powershell: (perintah PowerShell) | CIS Windows Server 2019 9.1.2 |
-| `WIN-FW-PUBLIC` | network_security | CRITICAL | `equals True` | powershell: (perintah PowerShell) | CIS Windows Server 2019 9.1.3 |
-| `WIN-GUEST-DISABLED` | authentication | HIGH | `equals False` | powershell: (perintah PowerShell) | CIS Windows Server 2019 2.3.1.5 |
-| `WIN-LMHASH-DISABLED` | cryptography | HIGH | `not_in [0, '0']` | registry: Lsa\NoLMHash | CIS Windows Server 2019 2.3.11.6 |
-| `WIN-PASS-COMPLEX` | authentication | HIGH | `equals 1` | powershell: (perintah PowerShell) | CIS Windows Server 2019 1.1.5 |
-| `WIN-PASS-MINLEN` | authentication | HIGH | `gte 14` | powershell: (perintah PowerShell) | CIS Windows Server 2019 1.1.4 |
-| `WIN-RDP-NLA` | network_security | CRITICAL | `equals 1` | registry: RDP-Tcp\UserAuthentication | CIS Windows Server 2019 18.9.63.1 |
-| `WIN-REMOTEREG-DISABLED` | services | MEDIUM | `equals 4` | registry: RemoteRegistry\Start | CIS Windows Server 2019 5.30 |
-| `WIN-SCREENLOCK-TIMEOUT` | authentication | MEDIUM | `lte 900` | registry: Desktop\ScreenSaveTimeOut | CIS Windows Server 2019 2.3.7.1 |
-| `WIN-SMB1-DISABLED` | network_security | CRITICAL | `equals Disabled` | powershell: (perintah PowerShell) | CIS Windows Server 2019 9.2.1 |
-| `WIN-UAC-ENABLED` | authorization | HIGH | `equals 1` | registry: System\EnableLUA | CIS Windows Server 2019 2.3.1.3 |
+| `WIN-ACCT-LOCKOUT` | authentication | HIGH | `in [1, 2, 3, 4, 5]` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.2.2 (L1) |
+| `WIN-DEFENDER-ENABLED` | compromise_indicators | CRITICAL | `equals False` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 18.10.43.10.3 (L1) |
+| `WIN-FW-DOMAIN` | network_security | CRITICAL | `equals True` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.1.1 (L1) |
+| `WIN-FW-PRIVATE` | network_security | CRITICAL | `equals True` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.2.1 (L1) |
+| `WIN-FW-PUBLIC` | network_security | CRITICAL | `equals True` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.3.1 (L1) |
+| `WIN-GUEST-DISABLED` | authentication | HIGH | `equals False` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.1.2 (L1) |
+| `WIN-LMHASH-DISABLED` | cryptography | HIGH | `not_in [0, '0']` | registry: Lsa\NoLMHash | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.11.5 (L1) |
+| `WIN-PASS-COMPLEX` | authentication | HIGH | `equals 1` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.1.5 (L1) |
+| `WIN-PASS-MINLEN` | authentication | HIGH | `gte 14` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.1.4 (L1) |
+| `WIN-RDP-NLA` | network_security | CRITICAL | `equals 1` | registry: RDP-Tcp\UserAuthentication | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 18.10.57.3.9.4 (L1) |
+| `WIN-REMOTEREG-DISABLED` | services | MEDIUM | `equals 4` | registry: RemoteRegistry\Start | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 5.26 (L2) |
+| `WIN-SCREENLOCK-TIMEOUT` | authentication | MEDIUM | `matches ^([1-9]\d?|[1-8]\d\d|900)$` | registry: Policies\\System\\InactivityTimeoutSecs | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.7.4 (L1) |
+| `WIN-SMB1-DISABLED` | network_security | CRITICAL | `equals Disabled` | powershell: (perintah PowerShell) | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 18.4.2 + 18.4.3 (L1) |
+| `WIN-UAC-ENABLED` | authorization | HIGH | `equals 1` | registry: System\EnableLUA | CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.17.6 (L1) |
 
 Catatan membaca tabel: "Kondisi PASS" adalah nilai mentah yang lolos, bukan selalu kata "enabled"
 (mis. Defender memakai `DisableRealtimeMonitoring equals False`; RemoteRegistry `Start equals 4` = Disabled).
 WIN-LMHASH memakai `not_in [0]`: kunci **tidak ada** dianggap PASS karena Windows modern tidak menyimpan LM hash secara bawaan.
 
 ## 6. Bukti empiris
-Lihat **`docs/VALIDATION_RESULTS.md`**: 18 run pada 2 mesin (Windows 11 fisik, Windows 10 VM) dengan perturbation testing
+Lihat **`docs/VALIDATION_RESULTS.md`**: 18 run pada 2 mesin (Host-A = Win11 fisik, Host-B = Win10 VM) dengan perturbation testing
 — tabel sensitivitas, apa yang terbukti/belum, dan pengukuran kinerja (VM 10–30× lebih lambat; 6 probe timeout → ERROR, bukan FAIL palsu).
 Pada Windows bawaan, empat kontrol akun/kata sandi gagal konsisten (MinLen=0, Complexity=0, Lockout=10, ScreenLock tidak diatur); Host-B juga memiliki SMBv1 aktif.
 
 ## 7. Ancaman terhadap validitas (tulis di Bab Pembahasan)
 1. **Cakupan terbatas**: 14 kontrol terkurasi ≠ CIS Benchmark penuh; Linux = indeks Lynis, bukan CIS.
 2. **Heuristik severity Linux** (warning/sysctl/saran) bukan skor standar.
-3. **Baseline kecil**: 3 host Windows 11 standalone; tidak mewakili server domain.
+3. **Baseline kecil**: 3 host Win11 standalone; tidak mewakili server domain.
 4. **Ground truth**: `results/independent_check.txt` memverifikasi manual — pertahankan sebagai validasi eksternal.
 5. **Lokalisasi**: scanner legacy membaca `net accounts` (bahasa Inggris); rule engine memakai `secedit` (netral bahasa).
 6. **Waktu eksekusi bergantung mesin**: VM lambat menghasilkan ERROR (bukan FAIL); atur `SCANNER_PROBE_TIMEOUT_SCALE`.
