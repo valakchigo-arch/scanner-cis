@@ -1,116 +1,99 @@
 """
-summarize_scenarios.py
-======================
-Baca semua hasil scenario testing, print tabel PASS/FAIL/ERROR per skenario.
+summarize_scenarios.py -- ringkas hasil run_scenarios.bat (results/scenarios/*.json).
+
+Perbaikan atas versi lama:
+  * label diambil dengan benar untuk KEDUA pola nama: `<label>.json` (keluaran bat) dan `<label>_<host>_<timestamp>.json`
+    (versi lama memotong `after_screenlock_1800` menjadi `after`, sehingga skenario saling menimpa dan cek rollback dilewati diam-diam);
+  * perbandingan memakai (status, nilai terbaca) SEMUA kontrol, bukan hanya himpunan ID yang FAIL
+    (arah FAIL->PASS dan nilai yang berubah tanpa flip status ikut terlihat);
+  * exit code 2 bila ada rollback yang tidak kembali ke baseline atau skenario `after_*` yang tidak mengubah apa pun (curiga no-op).
 """
+import glob
 import json
 import os
 import re
-import glob
 import sys
 
-
-def extract_label(filename: str) -> str:
-    """baseline_DESKTOP-XXX_20261012T160258Z.json → baseline"""
-    name = os.path.basename(filename).replace('.json', '')
-    parts = name.rsplit('_', 2)
-    return parts[0] if len(parts) >= 3 else name
+LABEL_WITH_HOST_TS = re.compile(r"^(?P<label>.+?)_(?P<host>[^_]+)_(?P<ts>\d{8}T\d{6}Z)$")
 
 
-def main():
-    root = os.path.dirname(os.path.abspath(__file__))
-    pattern = os.path.join(root, 'results', 'scenarios', '*.json')
-    files = sorted(glob.glob(pattern), key=os.path.getmtime)
+def extract_label(path: str) -> str:
+    name = os.path.basename(path)
+    name = name[:-5] if name.endswith(".json") else name
+    m = LABEL_WITH_HOST_TS.match(name)
+    return m.group("label") if m else name
 
-    if not files:
-        print("[WARN] Tidak ada file JSON ditemukan di results/scenarios/")
-        return 1
 
-    print()
-    print("=" * 72)
-    print(f"{'Scenario':<32} {'PASS':>6} {'FAIL':>6} {'ERROR':>6}")
-    print("-" * 72)
+def load(path: str) -> dict:
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+    out = {}
+    for f in data.get("findings", []):
+        actual = (f.get("comparison") or {}).get("actual")
+        out[f.get("control_id", "?")] = (f.get("status", "UNKNOWN"), None if actual is None else str(actual).strip())
+    return out
 
-    baseline_fails = None
-    results = {}
 
+def diff(base: dict, other: dict) -> list:
+    """[(control, (status, observed) di baseline, (status, observed) sekarang)] untuk yang berbeda atau hilang."""
+    return [(c, base.get(c), other.get(c)) for c in sorted(set(base) | set(other)) if base.get(c) != other.get(c)]
+
+
+def fmt(x) -> str:
+    return "-" if x is None else f"{x[1]!r}/{x[0]}"
+
+
+def summarize(directory: str) -> tuple:
+    files = sorted(glob.glob(os.path.join(directory, "*.json")), key=os.path.getmtime)
+    runs = {}
     for f in files:
         label = extract_label(f)
         try:
-            with open(f, encoding='utf-8') as fh:
-                data = json.load(fh)
-        except Exception as e:
-            print(f"{label:<32} [parse error: {e}]")
-            continue
-
-        counts = {'PASS': 0, 'FAIL': 0, 'ERROR': 0}
-        fail_rules = []
-        for finding in data.get('findings', []):
-            s = finding.get('status', 'UNKNOWN')
-            if s in counts:
-                counts[s] += 1
-            if s == 'FAIL':
-                fail_rules.append(finding.get('control_id', '?'))
-
-        results[label] = (counts, fail_rules)
-
-        if label == 'baseline':
-            baseline_fails = set(fail_rules)
-
-        print(f"{label:<32} {counts['PASS']:>6} {counts['FAIL']:>6} {counts['ERROR']:>6}")
-
-    print("=" * 72)
-
-    # Analysis
-    print()
-    print("=" * 72)
-    print("ANALISIS")
-    print("=" * 72)
-
-    if baseline_fails is None:
-        print("[WARN] Baseline tidak ditemukan. Rollback check dilewati.")
-    else:
-        print(f"Baseline FAIL rules: {sorted(baseline_fails)}")
-        print()
-
-        # Cek rollback konsisten dengan baseline
-        for label, (counts, fail_rules) in results.items():
-            if not label.startswith('rollback_'):
-                continue
-            rollback_fails = set(fail_rules)
-            if rollback_fails == baseline_fails:
-                print(f"[OK]   {label:<30} = baseline (rollback sukses)")
+            runs[label] = load(f)                      # label sama: yang terbaru menang
+        except (OSError, ValueError) as exc:
+            print(f"{label:<34} [parse error: {exc}]")
+    lines, anomalies = [], 0
+    if "baseline" not in runs:
+        return ["[WARN] baseline tidak ditemukan; tidak ada yang bisa dibandingkan."], 1
+    base = runs["baseline"]
+    lines.append(f"{'scan':<34} {'PASS':>5} {'FAIL':>5} {'ERROR':>5}")
+    for label, r in runs.items():
+        c = {s: sum(1 for st, _ in r.values() if st == s) for s in ("PASS", "FAIL", "ERROR")}
+        lines.append(f"{label:<34} {c['PASS']:>5} {c['FAIL']:>5} {c['ERROR']:>5}")
+    lines += ["", "ROLLBACK harus sama persis dengan baseline (status DAN nilai, semua kontrol):"]
+    for label, r in runs.items():
+        if label.startswith("rollback_"):
+            d = diff(base, r)
+            if d:
+                anomalies += 1
+                lines.append(f"[WARN] {label}: TIDAK kembali ke baseline")
+                lines += [f"         {c}: {fmt(b)} -> {fmt(n)}" for c, b, n in d]
             else:
-                diff_only_in_rollback = rollback_fails - baseline_fails
-                diff_only_in_baseline = baseline_fails - rollback_fails
-                print(f"[WARN] {label:<30} BEDA dari baseline!")
-                if diff_only_in_rollback:
-                    print(f"         Extra FAIL: {sorted(diff_only_in_rollback)}")
-                if diff_only_in_baseline:
-                    print(f"         Missing FAIL: {sorted(diff_only_in_baseline)}")
-
-        print()
-        # Cek after_* mengubah rule yang benar
-        print("Expected changes per skenario:")
-        for label, (counts, fail_rules) in results.items():
-            if not label.startswith('after_'):
-                continue
-            new_fails = set(fail_rules) - baseline_fails
-            if new_fails:
-                print(f"[OK]   {label:<30} new FAIL: {sorted(new_fails)}")
+                lines.append(f"[OK]   {label}")
+    lines += ["", "AFTER: kontrol yang berubah dibanding baseline (kosong = skenario tidak berpengaruh, curiga no-op):"]
+    for label, r in runs.items():
+        if label.startswith("after_"):
+            d = diff(base, r)
+            if d:
+                lines.append(f"[OK]   {label}")
+                lines += [f"         {c}: {fmt(b)} -> {fmt(n)}" for c, b, n in d]
             else:
-                print(f"[WARN] {label:<30} TIDAK ADA FAIL baru (ekspektasi: 1)")
-
-    print("=" * 72)
-    print()
-    print("Cara baca:")
-    print("  - 'rollback_*' harus PERSIS sama dengan baseline")
-    print("  - 'after_*' harus ada 1 FAIL baru (rule target)")
-    print("  - Kalau rule lain ikut berubah = BUG dependency")
-    print()
-
-    return 0
+                anomalies += 1
+                lines.append(f"[WARN] {label}: tidak ada perubahan vs baseline")
+    return lines, anomalies
 
 
-if __name__ == '__main__':
+def main(argv=None) -> int:
+    root = os.path.dirname(os.path.abspath(__file__))
+    directory = (argv or sys.argv[1:] or [os.path.join(root, "results", "scenarios")])[0]
+    if not glob.glob(os.path.join(directory, "*.json")):
+        print(f"[WARN] Tidak ada file JSON di {directory}")
+        return 1
+    lines, anomalies = summarize(directory)
+    print("\n".join(lines))
+    print(f"\nAnomali: {anomalies}")
+    return 2 if anomalies else 0
+
+
+if __name__ == "__main__":
     sys.exit(main())

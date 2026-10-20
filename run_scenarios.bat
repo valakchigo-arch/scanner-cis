@@ -4,64 +4,27 @@ setlocal enabledelayedexpansion
 title GeoThread DJBC - Windows Scenario Testing
 
 REM ============================================================
-REM GeoThread DJBC - Windows Scenario Testing
-REM Run as Administrator
+REM LEGACY / JALUR VALIDASI KEDUA (silang-uji dengan tools\scenario_harness.py)
+REM - Rollback di skrip ini HARD-CODED untuk baseline Windows default; guard di bawah menolak
+REM   mesin yang baseline-nya berbeda SEBELUM ada setelan yang diubah.
+REM - Jalankan sebagai Administrator, di VM yang sudah di-snapshot.
 REM ============================================================
-
-set PYTHON=C:\geothread\.venv\Scripts\python.exe
 cd /d "%~dp0"
-set ROOT=%CD%
-set RESULTS=%ROOT%\results
-set SCENARIOS=%RESULTS%\scenarios
-set LOG=%SCENARIOS%\_scenario_log.txt
-
-REM ---- Check admin ----
-net session >nul 2>&1
-if %errorlevel% neq 0 (
-    echo.
-    echo [ERROR] Harus dijalankan sebagai Administrator
-    echo         Klik kanan -^> Run as administrator
-    echo.
-    pause
-    exit /b 1
-)
-
-REM ---- Check Python ----
-if not exist "%PYTHON%" (
-    echo.
-    echo [ERROR] Python venv tidak ditemukan: %PYTHON%
-    echo         Edit PYTHON variable di script ini.
-    echo.
-    pause
-    exit /b 1
-)
-
-REM ---- Setup dirs ----
+set "ROOT=%CD%"
+set "PYTHON=%ROOT%\.venv\Scripts\python.exe"
+if not exist "%PYTHON%" set "PYTHON=python"
+set "RESULTS=%ROOT%\results"
+set "SCENARIOS=%RESULTS%\scenarios"
 if not exist "%SCENARIOS%" mkdir "%SCENARIOS%"
+set "LOG=%SCENARIOS%\_scenario_log.txt"
 
-REM ---- Log header ----
-echo ============================================================ > "%LOG%"
-echo GeoThread DJBC - Scenario Testing >> "%LOG%"
+net session >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Harus dijalankan sebagai Administrator.
+    pause
+    exit /b 1
+)
 echo Started: %date% %time% >> "%LOG%"
-echo Admin: yes >> "%LOG%"
-echo Host: %COMPUTERNAME% >> "%LOG%"
-echo ============================================================ >> "%LOG%"
-
-cls
-echo.
-echo ============================================================
-echo   GeoThread DJBC - Windows Scenario Testing
-echo ============================================================
-echo.
-echo   Python:  %PYTHON%
-echo   Results: %SCENARIOS%
-echo   Log:     %LOG%
-echo.
-echo   Akan menjalankan 11 skenario test.
-echo   Estimasi: 10-15 menit.
-echo.
-echo   Tekan Ctrl+C untuk batal, atau
-pause
 
 REM ============================================================
 REM BASELINE
@@ -69,20 +32,41 @@ REM ============================================================
 call :header "BASELINE"
 call :run_scan baseline
 
+REM ---- GUARD: rollback skrip ini hard-coded untuk baseline default ----
+"%PYTHON%" tools\bat_baseline_guard.py "%SCENARIOS%\baseline.json"
+if errorlevel 1 (
+    echo [ABORT] Baseline BUKAN default: rollback hard-coded tidak aman. TIDAK ADA setelan yang diubah.
+    pause
+    exit /b 1
+)
+
 REM ============================================================
-REM SCENARIO 1 - Screen Lock Timeout
+REM SCENARIO 1 - Screen Lock (P0-2: HKLM InactivityTimeoutSecs)
+REM CIS 2.3.7.4 "Interactive logon: Machine inactivity limit"
 REM ============================================================
-call :header "SCENARIO 1 - Screen Lock Timeout 1800s"
+call :header "SCENARIO 1 - Screen Lock Timeout (HKLM InactivityTimeoutSecs)"
 call :run_scan before_screenlock
-echo [CHANGE] ScreenSaveTimeOut=1800
-reg add "HKCU\Control Panel\Desktop" /v ScreenSaveTimeOut /t REG_SZ /d 1800 /f >nul
+set SLKEY=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+set SLVAL=InactivityTimeoutSecs
+reg add "%SLKEY%" /v %SLVAL% /t REG_DWORD /d 1800 /f >nul 2>&1
 call :sleep
 call :run_scan after_screenlock_1800
-echo [EXPECT] WIN-SCREENLOCK-TIMEOUT = FAIL
-echo [ROLLBACK] delete ScreenSaveTimeOut
-reg delete "HKCU\Control Panel\Desktop" /v ScreenSaveTimeOut /f >nul 2>&1
+reg add "%SLKEY%" /v %SLVAL% /t REG_DWORD /d 901 /f >nul 2>&1
+call :sleep
+call :run_scan after_screenlock_901
+reg add "%SLKEY%" /v %SLVAL% /t REG_DWORD /d 900 /f >nul 2>&1
+call :sleep
+call :run_scan after_screenlock_900
+reg add "%SLKEY%" /v %SLVAL% /t REG_DWORD /d 0 /f >nul 2>&1
+call :sleep
+call :run_scan after_screenlock_0
+reg add "%SLKEY%" /v %SLVAL% /t REG_DWORD /d 1 /f >nul 2>&1
+call :sleep
+call :run_scan after_screenlock_1
+reg delete "%SLKEY%" /v %SLVAL% /f >nul 2>&1
 call :sleep
 call :run_scan rollback_screenlock
+
 
 REM ============================================================
 REM SCENARIO 2 - Password Min Length
@@ -212,23 +196,31 @@ REM ============================================================
 call :header "SCENARIO 10 - Password Complexity Disabled"
 call :run_scan before_complex
 
-echo [CHANGE] PasswordComplexity=0 via secedit
-set SECPOL=%TEMP%\secpol_orig.inf
-set SECPOL_MOD=%TEMP%\secpol_mod.inf
+echo [BASELINE] PasswordComplexity via secedit
+set SECPOL=%TEMP%\secpol_orig_complex.inf
+set SECPOL_MOD=%TEMP%\secpol_mod_complex.inf
 secedit /export /cfg "%SECPOL%" >nul 2>&1
 copy "%SECPOL%" "%SECPOL_MOD%" >nul 2>&1
-powershell -Command "(Get-Content '%SECPOL_MOD%') -replace 'PasswordComplexity = 1', 'PasswordComplexity = 0' | Set-Content '%SECPOL_MOD%'"
-secedit /configure /db "%TEMP%\secedit.sdb" /cfg "%SECPOL_MOD%" /areas SECURITYPOLICY >nul 2>&1
+for /f %%a in ('powershell -NoProfile -Command "((Select-String -Path '%SECPOL%' -Pattern '^PasswordComplexity').Line -split '=')[1].Trim()"') do set ORIG_COMPLEX=%%a
+if not defined ORIG_COMPLEX (
+    echo [SKIP] Skenario 10: baseline PasswordComplexity tidak terbaca; dilewati tanpa mengubah apa pun.
+    del "%SECPOL%" "%SECPOL_MOD%" >nul 2>&1
+    goto :after_scenario10
+)
+echo [INFO] Complexity baseline = %ORIG_COMPLEX%
+echo [CHANGE] PasswordComplexity=1 via secedit
+powershell -Command "(Get-Content '%SECPOL_MOD%') -replace 'PasswordComplexity = %ORIG_COMPLEX%', 'PasswordComplexity = 1' | Set-Content -Encoding Unicode '%SECPOL_MOD%'"
+secedit /configure /db "%TEMP%\secedit_complex.sdb" /cfg "%SECPOL_MOD%" /areas SECURITYPOLICY >nul 2>&1
 call :sleep
-call :run_scan after_complex_off
-echo [EXPECT] WIN-PASS-COMPLEX = FAIL
+call :run_scan after_complex_on
 
-echo [ROLLBACK] restore from backup
-secedit /configure /db "%TEMP%\secedit.sdb" /cfg "%SECPOL%" /areas SECURITYPOLICY >nul 2>&1
-del "%SECPOL%" "%SECPOL_MOD%" "%TEMP%\secedit.sdb" >nul 2>&1
+echo [ROLLBACK] restore PasswordComplexity=%ORIG_COMPLEX%
+secedit /configure /db "%TEMP%\secedit_complex.sdb" /cfg "%SECPOL%" /areas SECURITYPOLICY >nul 2>&1
+del "%SECPOL%" "%SECPOL_MOD%" "%TEMP%\secedit_complex.sdb" >nul 2>&1
 call :sleep
 call :run_scan rollback_complex
 
+:after_scenario10
 REM ============================================================
 REM SCENARIO 11 - UAC (registry only, no reboot)
 REM ============================================================
@@ -336,3 +328,4 @@ goto :eof
 :summarize
 "%PYTHON%" "%~dp0summarize_scenarios.py"
 goto :eof
+

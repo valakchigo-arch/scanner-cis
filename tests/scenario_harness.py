@@ -423,9 +423,19 @@ class PowerShellTarget:
 
 @dataclass
 class CompositeTarget:
-    registry: Any = field(default_factory=DictTarget)
+    registry: Any = None
     secedit: Any = None
     powershell: Any = None
+
+    def __post_init__(self):
+        if self.registry is None:
+            try:
+                self.registry = DictTarget(baseline={})
+            except TypeError:
+                try:
+                    self.registry = DictTarget({})
+                except TypeError:
+                    self.registry = _MinimalDictTarget()
     def _pick(self, spec: dict) -> Any:
         k = spec.get("kind", "registry")
         if k == "secedit":
