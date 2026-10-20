@@ -1,0 +1,22 @@
+rule_id: WIN-FW-PUBLIC
+title: Windows Firewall Public Profile Enabled
+category: network_security
+os: windows
+standard:
+  name: CIS
+  reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.3.1 (L1)"
+  level: L1
+severity: CRITICAL
+confidence: DIRECT
+condition:
+  operator: equals
+  expected_value: true
+probe:
+  provider: windows.powershell
+  params:
+    command: "Get-NetFirewallProfile -Name Public | Select-Object -ExpandProperty Enabled"
+remediation:
+  action: "Enable Windows Firewall Public profile via Group Policy or netsh"
+description: >
+  Windows Firewall Public profile must be enabled to block unauthorized
+  inbound connections on public networks.

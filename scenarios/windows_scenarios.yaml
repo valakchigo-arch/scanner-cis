@@ -1,0 +1,240 @@
+# Skenario sensitivitas (perturbation testing) untuk rule Windows.
+# DATA, bukan kode: dijalankan oleh tools/scenario_harness.py. Semua perintah di sini: [NOT RUN] sampai dijalankan di Windows.
+#
+# Field:
+#   id, control, title
+#   set                    perintah PowerShell (urut) yang mengubah setelan
+#   rollback               perintah pemulihan. {baseline} = nilai terbaca saat baseline (hanya ^-?\d+$ yang boleh disubstitusi)
+#   rollback_when_absent   dipakai bila baseline = key tidak ada (None)
+#   expected_observed      nilai yang HARUS terbaca probe setelah `set` (string | null = key tidak ada | daftar nilai yang diterima)
+#   expected_status_after  PASS | FAIL  (status rule yang diharapkan pada nilai itu)
+#   baseline_must_be       prasyarat nilai baseline; bila tidak cocok skenario DILEWATI (rollback statis jadi aman)
+#   rollback_accept        nilai tambahan yang dianggap pulih (mis. pending-reboot)
+#   also_affects           kontrol lain yang SAH ikut berubah (bukan spurious)
+#   kind                   flip | boundary | semantic
+#   vm_only                true = hanya boleh dengan --host-kind vm
+#   needs_reboot           true = efek penuh baru setelah restart (dicatat di laporan)
+#   prior_evidence         catatan asal klaim sebelumnya (jika ada)
+version: 1
+scenarios:
+
+  # ---------------- sisi PASS untuk ambang numerik (P1-3) ----------------
+  - id: minlen_13
+    control: WIN-PASS-MINLEN
+    title: "MinLen 13 (tepat di bawah batas) -> FAIL"
+    kind: boundary
+    set: ['net accounts /minpwlen:13']
+    rollback: ['net accounts /minpwlen:{baseline}']
+    expected_observed: "13"
+    expected_status_after: FAIL
+  - id: minlen_14
+    control: WIN-PASS-MINLEN
+    title: "MinLen 14 (tepat di batas) -> PASS"
+    kind: boundary
+    set: ['net accounts /minpwlen:14']
+    rollback: ['net accounts /minpwlen:{baseline}']
+    expected_observed: "14"
+    expected_status_after: PASS
+
+  - id: lockout_5
+    control: WIN-ACCT-LOCKOUT
+    title: "Lockout threshold 5 (batas atas) -> PASS"
+    kind: boundary
+    set: ['net accounts /lockoutthreshold:5']
+    rollback: ['net accounts /lockoutthreshold:{baseline}']
+    expected_observed: "5"
+    expected_status_after: PASS
+  - id: lockout_6
+    control: WIN-ACCT-LOCKOUT
+    title: "Lockout threshold 6 (di atas batas) -> FAIL"
+    kind: boundary
+    set: ['net accounts /lockoutthreshold:6']
+    rollback: ['net accounts /lockoutthreshold:{baseline}']
+    expected_observed: "6"
+    expected_status_after: FAIL
+
+  - id: screenlock_900
+    control: WIN-SCREENLOCK-TIMEOUT
+    title: "InactivityTimeoutSecs 900 -> PASS"
+    kind: boundary
+    set: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /t REG_DWORD /d 900 /f']
+    rollback: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /t REG_DWORD /d {baseline} /f']
+    rollback_when_absent: ['reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /f']
+    expected_observed: "900"
+    expected_status_after: PASS
+  - id: screenlock_901
+    control: WIN-SCREENLOCK-TIMEOUT
+    title: "InactivityTimeoutSecs 901 -> FAIL"
+    kind: boundary
+    set: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /t REG_DWORD /d 901 /f']
+    rollback: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /t REG_DWORD /d {baseline} /f']
+    rollback_when_absent: ['reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /f']
+    expected_observed: "901"
+    expected_status_after: FAIL
+  - id: screenlock_0
+    control: WIN-SCREENLOCK-TIMEOUT
+    title: "InactivityTimeoutSecs 0 (dinonaktifkan) -> FAIL  [bug lama: lte 900 meloloskan 0]"
+    kind: boundary
+    set: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /t REG_DWORD /d 0 /f']
+    rollback: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /t REG_DWORD /d {baseline} /f']
+    rollback_when_absent: ['reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v InactivityTimeoutSecs /f']
+    expected_observed: "0"
+    expected_status_after: FAIL
+
+  - id: complexity_on
+    control: WIN-PASS-COMPLEX
+    title: "PasswordComplexity 0 -> 1 (FAIL -> PASS). Skenario 'off' TIDAK ADA: baseline sudah 0 = no-op"
+    kind: flip
+    set:
+      - |
+        $d = Join-Path $env:TEMP ('gt_' + [guid]::NewGuid().ToString('N'))
+        New-Item -ItemType Directory -Path $d | Out-Null
+        try {
+          $inf = Join-Path $d 'p.inf'
+          @'
+        [Unicode]
+        Unicode=yes
+        [Version]
+        signature="$CHICAGO$"
+        Revision=1
+        [System Access]
+        PasswordComplexity = 1
+        '@ | Set-Content -Path $inf -Encoding Unicode
+          secedit /configure /db (Join-Path $d 'p.sdb') /cfg $inf /areas SECURITYPOLICY /quiet
+          if ($LASTEXITCODE -ne 0) { throw "secedit configure gagal ($LASTEXITCODE)" }
+        } finally { Remove-Item $d -Recurse -Force -ErrorAction SilentlyContinue }
+    rollback:
+      - |
+        $d = Join-Path $env:TEMP ('gt_' + [guid]::NewGuid().ToString('N'))
+        New-Item -ItemType Directory -Path $d | Out-Null
+        try {
+          $inf = Join-Path $d 'p.inf'
+          @'
+        [Unicode]
+        Unicode=yes
+        [Version]
+        signature="$CHICAGO$"
+        Revision=1
+        [System Access]
+        PasswordComplexity = {baseline}
+        '@ | Set-Content -Path $inf -Encoding Unicode
+          secedit /configure /db (Join-Path $d 'p.sdb') /cfg $inf /areas SECURITYPOLICY /quiet
+          if ($LASTEXITCODE -ne 0) { throw "secedit configure gagal ($LASTEXITCODE)" }
+        } finally { Remove-Item $d -Recurse -Force -ErrorAction SilentlyContinue }
+    expected_observed: "1"
+    expected_status_after: PASS
+
+  # ---------------- kontrol yang belum pernah diubah (P1-3) ----------------
+  - id: defender_off
+    control: WIN-DEFENDER-ENABLED
+    title: "Real-time protection dimatikan -> FAIL (Tamper Protection dapat memblokir => SET_INEFFECTIVE, bukan kegagalan deteksi)"
+    kind: flip
+    baseline_must_be: ["False"]
+    set: ['Set-MpPreference -DisableRealtimeMonitoring $true']
+    rollback: ['Set-MpPreference -DisableRealtimeMonitoring $false']
+    expected_observed: "True"
+    expected_status_after: FAIL
+  - id: fw_domain_off
+    control: WIN-FW-DOMAIN
+    title: "Firewall profil Domain dimatikan -> FAIL"
+    kind: flip
+    baseline_must_be: ["True"]
+    set: ['Set-NetFirewallProfile -Name Domain -Enabled False']
+    rollback: ['Set-NetFirewallProfile -Name Domain -Enabled True']
+    expected_observed: "False"
+    expected_status_after: FAIL
+  - id: smb1_enable
+    control: WIN-SMB1-DISABLED
+    title: "Fitur SMB1Protocol diaktifkan -> FAIL (butuh restart untuk efek penuh; rollback juga pending)"
+    kind: flip
+    vm_only: true
+    needs_reboot: true
+    baseline_must_be: ["Disabled"]
+    set: ['Enable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart -All | Out-Null']
+    rollback: ['Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart | Out-Null']
+    expected_observed: ["Enabled", "EnablePending"]
+    expected_status_after: FAIL
+    rollback_accept: ["Disabled", "DisablePending"]
+  - id: lmhash_absent
+    control: WIN-LMHASH-DISABLED
+    title: "Key NoLMHash dihapus -> PASS (disengaja: default modern; confidence INFERRED)"
+    kind: semantic
+    baseline_must_be: ["1"]
+    set: ['reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NoLMHash /f']
+    rollback: ['reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NoLMHash /t REG_DWORD /d 1 /f']
+    expected_observed: null
+    expected_status_after: PASS
+
+  # ---------------- regresi: sudah pernah terbukti PASS->FAIL->PASS (klaim dari pemilik; data mentah tidak ada di repo) ----------------
+  - id: guest_on
+    control: WIN-GUEST-DISABLED
+    title: "Akun Guest diaktifkan -> FAIL"
+    kind: flip
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["False"]
+    set: ['Enable-LocalUser -Name Guest']
+    rollback: ['Disable-LocalUser -Name Guest']
+    expected_observed: "True"
+    expected_status_after: FAIL
+  - id: remotereg_auto
+    control: WIN-REMOTEREG-DISABLED
+    title: "RemoteRegistry Start=2 (Automatic) -> FAIL"
+    kind: flip
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["4"]
+    set: ['Set-Service -Name RemoteRegistry -StartupType Automatic']
+    rollback: ['Set-Service -Name RemoteRegistry -StartupType Disabled']
+    expected_observed: "2"
+    expected_status_after: FAIL
+  - id: fw_private_off
+    control: WIN-FW-PRIVATE
+    title: "Firewall profil Private dimatikan -> FAIL"
+    kind: flip
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["True"]
+    set: ['Set-NetFirewallProfile -Name Private -Enabled False']
+    rollback: ['Set-NetFirewallProfile -Name Private -Enabled True']
+    expected_observed: "False"
+    expected_status_after: FAIL
+  - id: fw_public_off
+    control: WIN-FW-PUBLIC
+    title: "Firewall profil Public dimatikan -> FAIL"
+    kind: flip
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["True"]
+    set: ['Set-NetFirewallProfile -Name Public -Enabled False']
+    rollback: ['Set-NetFirewallProfile -Name Public -Enabled True']
+    expected_observed: "False"
+    expected_status_after: FAIL
+  - id: lmhash_zero
+    control: WIN-LMHASH-DISABLED
+    title: "NoLMHash=0 -> FAIL"
+    kind: flip
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["1"]
+    set: ['reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NoLMHash /t REG_DWORD /d 0 /f']
+    rollback: ['reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NoLMHash /t REG_DWORD /d 1 /f']
+    expected_observed: "0"
+    expected_status_after: FAIL
+  - id: rdp_nla_off
+    control: WIN-RDP-NLA
+    title: "RDP NLA dimatikan (UserAuthentication=0) -> FAIL"
+    kind: flip
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["1"]
+    set: ['reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v UserAuthentication /t REG_DWORD /d 0 /f']
+    rollback: ['reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v UserAuthentication /t REG_DWORD /d 1 /f']
+    expected_observed: "0"
+    expected_status_after: FAIL
+  - id: uac_off
+    control: WIN-UAC-ENABLED
+    title: "EnableLUA=0 -> FAIL (hanya VM; efek penuh butuh restart)"
+    kind: flip
+    vm_only: true
+    needs_reboot: true
+    prior_evidence: "klaim pemilik: terbukti live; data mentah tidak ada di repo"
+    baseline_must_be: ["1"]
+    set: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d 0 /f']
+    rollback: ['reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d 1 /f']
+    expected_observed: "0"
+    expected_status_after: FAIL

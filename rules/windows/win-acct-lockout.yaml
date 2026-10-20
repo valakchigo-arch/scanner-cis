@@ -1,0 +1,34 @@
+rule_id: WIN-ACCT-LOCKOUT
+title: Account Lockout Threshold 1 to 5 Attempts
+category: authentication
+os: windows
+description: >
+  Account lockout must trigger after 1-5 failed logon attempts.
+  Value 0 means "never lock" which allows unlimited brute-force attempts
+  and must FAIL. Values greater than 5 also fail this control.
+standard:
+  name: CIS
+  reference: "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.2.2 (L1)"
+  level: L1
+severity: HIGH
+confidence: DIRECT
+condition:
+  operator: in
+  expected_value: [1, 2, 3, 4, 5]
+probe:
+  provider: windows.powershell
+  params:
+    command: |
+      $t = Join-Path $env:TEMP ('secpol_' + [guid]::NewGuid().ToString('N') + '.inf')
+      try {
+        secedit /export /cfg $t /quiet | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "secedit gagal (exit $LASTEXITCODE) - butuh Administrator" }
+        $m = Select-String -Path $t -Pattern '^LockoutBadCount\s*=\s*(-?\d+)'
+        if (-not $m) { throw 'LockoutBadCount tidak ditemukan pada hasil export' }
+        $m.Matches[0].Groups[1].Value
+      } finally { Remove-Item $t -Force -ErrorAction SilentlyContinue }
+remediation:
+  action: >
+    Set via Group Policy: Computer Configuration > Windows Settings >
+    Security Settings > Account Policies > Account Lockout Policy >
+    "Account lockout threshold" = 5 or fewer (but not 0).
