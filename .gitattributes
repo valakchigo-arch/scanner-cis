@@ -1,1 +1,8 @@
+# Default: LF untuk semua file teks (Python, YAML, MD)
 * text=auto eol=lf
+
+# Windows executable scripts WAJIB CRLF (cmd.exe tidak andal pada LF-only,
+# terutama untuk :label dan goto :eof ? lihat test_bat_tools.py)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf

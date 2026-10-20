@@ -1,0 +1,1667 @@
+============================================================ 
+GeoThread DJBC - Scenario Testing 
+Started: Thu 10/15/2026 15:56:20.09 
+Admin: yes 
+Host: VALAK 
+============================================================ 
+ 
+ 
+============================================================ 
+BASELINE 
+============================================================ 
+ 
+--- SCAN: baseline at 15:56:23.06 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\baseline_VALAK_20261015T085642Z.json
+ 
+ 
+============================================================ 
+SCENARIO 1 - Screen Lock Timeout 1800s 
+============================================================ 
+ 
+--- SCAN: before_screenlock at 15:56:42.67 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_screenlock_VALAK_20261015T085700Z.json
+ 
+--- SCAN: after_screenlock_1800 at 15:57:03.17 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              '1800'
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_screenlock_1800_VALAK_20261015T085720Z.json
+ 
+--- SCAN: rollback_screenlock at 15:57:23.46 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_screenlock_VALAK_20261015T085741Z.json
+ 
+ 
+============================================================ 
+SCENARIO 2 - Password MinLength 8 
+============================================================ 
+ 
+--- SCAN: before_minlen at 15:57:41.93 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_minlen_VALAK_20261015T085804Z.json
+ 
+--- SCAN: after_minlen_8 at 15:58:06.70 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '8'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_minlen_8_VALAK_20261015T085825Z.json
+ 
+--- SCAN: rollback_minlen at 15:58:27.82 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_minlen_VALAK_20261015T085845Z.json
+ 
+ 
+============================================================ 
+SCENARIO 3 - Lockout Threshold 0 
+============================================================ 
+ 
+--- SCAN: before_lockout at 15:58:45.85 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_lockout_VALAK_20261015T085903Z.json
+ 
+--- SCAN: after_lockout_0 at 15:59:05.96 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '0'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_lockout_0_VALAK_20261015T085923Z.json
+ 
+--- SCAN: rollback_lockout at 15:59:25.93 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_lockout_VALAK_20261015T085943Z.json
+ 
+ 
+============================================================ 
+SCENARIO 4 - Guest Account Enabled 
+============================================================ 
+ 
+--- SCAN: before_guest at 15:59:43.72 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_guest_VALAK_20261015T090001Z.json
+ 
+--- SCAN: after_guest_on at 16:00:03.57 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         FAIL   False            'True'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_guest_on_VALAK_20261015T090021Z.json
+ 
+--- SCAN: rollback_guest at 16:00:23.68 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_guest_VALAK_20261015T090041Z.json
+ 
+ 
+============================================================ 
+SCENARIO 5 - Remote Registry Enabled 
+============================================================ 
+ 
+--- SCAN: before_remotereg at 16:00:41.50 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_remotereg_VALAK_20261015T090058Z.json
+ 
+--- SCAN: after_remotereg_on at 16:01:03.33 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     FAIL   4                '2'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_remotereg_on_VALAK_20261015T090120Z.json
+ 
+--- SCAN: rollback_remotereg at 16:01:25.79 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_remotereg_VALAK_20261015T090143Z.json
+ 
+ 
+============================================================ 
+SCENARIO 6 - Firewall Private OFF 
+============================================================ 
+ 
+--- SCAN: before_fw_private at 16:01:43.94 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_fw_private_VALAK_20261015T090201Z.json
+ 
+--- SCAN: after_fw_private_off at 16:02:04.65 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             FAIL   True             'False'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_fw_private_off_VALAK_20261015T090222Z.json
+ 
+--- SCAN: rollback_fw_private at 16:02:24.43 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_fw_private_VALAK_20261015T090241Z.json
+ 
+ 
+============================================================ 
+SCENARIO 7 - Firewall Public OFF 
+============================================================ 
+ 
+--- SCAN: before_fw_public at 16:02:42.32 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_fw_public_VALAK_20261015T090259Z.json
+ 
+--- SCAN: after_fw_public_off at 16:03:02.26 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              FAIL   True             'False'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_fw_public_off_VALAK_20261015T090319Z.json
+ 
+--- SCAN: rollback_fw_public at 16:03:22.09 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_fw_public_VALAK_20261015T090339Z.json
+ 
+ 
+============================================================ 
+SCENARIO 8 - LMHash Enabled (NoLMHash=0) 
+============================================================ 
+ 
+--- SCAN: before_lmhash at 16:03:39.71 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_lmhash_VALAK_20261015T090357Z.json
+ 
+--- SCAN: after_lmhash_0 at 16:03:59.31 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        FAIL   [0, '0']         '0'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_lmhash_0_VALAK_20261015T090416Z.json
+ 
+--- SCAN: rollback_lmhash at 16:04:19.01 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_lmhash_VALAK_20261015T090436Z.json
+ 
+ 
+============================================================ 
+SCENARIO 9 - RDP NLA Disabled 
+============================================================ 
+ 
+--- SCAN: before_rdp_nla at 16:04:36.83 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_rdp_nla_VALAK_20261015T090454Z.json
+ 
+--- SCAN: after_rdp_nla_off at 16:04:56.62 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                FAIL   1                '0'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_rdp_nla_off_VALAK_20261015T090514Z.json
+ 
+--- SCAN: rollback_rdp_nla at 16:05:16.43 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_rdp_nla_VALAK_20261015T090533Z.json
+ 
+ 
+============================================================ 
+SCENARIO 10 - Password Complexity Disabled 
+============================================================ 
+ 
+--- SCAN: before_complex at 16:05:34.33 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_complex_VALAK_20261015T090551Z.json
+ 
+--- SCAN: after_complex_off at 16:05:55.53 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_complex_off_VALAK_20261015T090612Z.json
+ 
+--- SCAN: rollback_complex at 16:06:15.28 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_complex_VALAK_20261015T090632Z.json
+ 
+ 
+============================================================ 
+SCENARIO 11 - UAC Disabled (registry only) 
+============================================================ 
+ 
+--- SCAN: before_uac at 16:06:33.15 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\before_uac_VALAK_20261015T090650Z.json
+ 
+--- SCAN: after_uac_off at 16:06:53.20 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            FAIL   1                '0'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\after_uac_off_VALAK_20261015T090710Z.json
+ 
+--- SCAN: rollback_uac at 16:07:13.16 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   900              None
+WIN-SMB1-DISABLED          PASS   Disabled         'Disabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\results\rollback_uac_VALAK_20261015T090730Z.json
+ 
+ 
+============================================================ 
+SKIPPED SCENARIOS 
+============================================================ 
+ 
+ 
+============================================================ 
+SUMMARY 
+============================================================ 
+ 
+============================================================ 
+Finished: Thu 10/15/2026 16:07:34.99 
+============================================================ 
+Started: Tue 10/20/2026  9:54:56.48 
+ 
+ 
+============================================================ 
+BASELINE 
+============================================================ 
+ 
+--- SCAN: baseline at  9:54:57.08 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\baseline_DESKTOP-C2474TM_20261020T165532Z.json
+ 
+ 
+============================================================ 
+SCENARIO 1 - Screen Lock Timeout (HKLM InactivityTimeoutSecs) 
+============================================================ 
+ 
+--- SCAN: before_screenlock at  9:55:34.03 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_screenlock_DESKTOP-C2474TM_20261020T165607Z.json
+ 
+--- SCAN: after_screenlock_1800 at  9:56:10.41 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  '1800'
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_screenlock_1800_DESKTOP-C2474TM_20261020T165642Z.json
+ 
+--- SCAN: after_screenlock_901 at  9:56:45.20 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  '901'
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_screenlock_901_DESKTOP-C2474TM_20261020T165719Z.json
+ 
+--- SCAN: after_screenlock_900 at  9:57:22.06 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     PASS   ^([1-9]\d?|[1-8  '900'
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_screenlock_900_DESKTOP-C2474TM_20261020T165756Z.json
+ 
+--- SCAN: after_screenlock_0 at  9:57:59.25 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  '0'
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_screenlock_0_DESKTOP-C2474TM_20261020T165833Z.json
+ 
+--- SCAN: after_screenlock_1 at  9:58:36.44 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     PASS   ^([1-9]\d?|[1-8  '1'
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_screenlock_1_DESKTOP-C2474TM_20261020T165913Z.json
+ 
+--- SCAN: rollback_screenlock at 10:48:21.19 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_screenlock_DESKTOP-C2474TM_20261020T174857Z.json
+ 
+ 
+============================================================ 
+SCENARIO 2 - Password MinLength 8 
+============================================================ 
+ 
+--- SCAN: before_minlen at 10:48:57.92 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_minlen_DESKTOP-C2474TM_20261020T174935Z.json
+ 
+--- SCAN: after_minlen_8 at 10:49:39.66 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '8'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_minlen_8_DESKTOP-C2474TM_20261020T175011Z.json
+ 
+--- SCAN: rollback_minlen at 10:50:14.83 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_minlen_DESKTOP-C2474TM_20261020T175046Z.json
+ 
+ 
+============================================================ 
+SCENARIO 3 - Lockout Threshold 0 
+============================================================ 
+ 
+--- SCAN: before_lockout at 10:50:47.88 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_lockout_DESKTOP-C2474TM_20261020T175119Z.json
+ 
+--- SCAN: after_lockout_0 at 10:51:22.86 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '0'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_lockout_0_DESKTOP-C2474TM_20261020T175155Z.json
+ 
+--- SCAN: rollback_lockout at 10:51:58.27 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_lockout_DESKTOP-C2474TM_20261020T175229Z.json
+ 
+ 
+============================================================ 
+SCENARIO 4 - Guest Account Enabled 
+============================================================ 
+ 
+--- SCAN: before_guest at 10:52:30.27 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_guest_DESKTOP-C2474TM_20261020T175303Z.json
+ 
+--- SCAN: after_guest_on at 10:53:05.95 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         FAIL   False            'True'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_guest_on_DESKTOP-C2474TM_20261020T175337Z.json
+ 
+--- SCAN: rollback_guest at 10:53:40.24 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_guest_DESKTOP-C2474TM_20261020T175425Z.json
+ 
+ 
+============================================================ 
+SCENARIO 5 - Remote Registry Enabled 
+============================================================ 
+ 
+--- SCAN: before_remotereg at 10:54:27.00 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_remotereg_DESKTOP-C2474TM_20261020T175503Z.json
+ 
+--- SCAN: after_remotereg_on at 10:55:08.96 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     FAIL   4                '2'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_remotereg_on_DESKTOP-C2474TM_20261020T175545Z.json
+ 
+--- SCAN: rollback_remotereg at 10:55:51.20 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_remotereg_DESKTOP-C2474TM_20261020T175628Z.json
+ 
+ 
+============================================================ 
+SCENARIO 6 - Firewall Private OFF 
+============================================================ 
+ 
+--- SCAN: before_fw_private at 10:56:29.34 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_fw_private_DESKTOP-C2474TM_20261020T175707Z.json
+ 
+--- SCAN: after_fw_private_off at 10:57:12.38 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             FAIL   True             'False'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_fw_private_off_DESKTOP-C2474TM_20261020T175750Z.json
+ 
+--- SCAN: rollback_fw_private at 10:57:55.67 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_fw_private_DESKTOP-C2474TM_20261020T175834Z.json
+ 
+ 
+============================================================ 
+SCENARIO 7 - Firewall Public OFF 
+============================================================ 
+ 
+--- SCAN: before_fw_public at 10:58:35.56 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_fw_public_DESKTOP-C2474TM_20261020T175914Z.json
+ 
+--- SCAN: after_fw_public_off at 10:59:18.86 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              FAIL   True             'False'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_fw_public_off_DESKTOP-C2474TM_20261020T180001Z.json
+ 
+--- SCAN: rollback_fw_public at 11:00:05.29 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_fw_public_DESKTOP-C2474TM_20261020T180046Z.json
+ 
+ 
+============================================================ 
+SCENARIO 8 - LMHash Enabled (NoLMHash=0) 
+============================================================ 
+ 
+--- SCAN: before_lmhash at 11:00:47.35 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_lmhash_DESKTOP-C2474TM_20261020T180126Z.json
+ 
+--- SCAN: after_lmhash_0 at 11:01:29.50 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        FAIL   [0, '0']         '0'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_lmhash_0_DESKTOP-C2474TM_20261020T180205Z.json
+ 
+--- SCAN: rollback_lmhash at 11:02:08.69 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_lmhash_DESKTOP-C2474TM_20261020T180246Z.json
+ 
+ 
+============================================================ 
+SCENARIO 9 - RDP NLA Disabled 
+============================================================ 
+ 
+--- SCAN: before_rdp_nla at 11:02:47.53 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_rdp_nla_DESKTOP-C2474TM_20261020T180325Z.json
+ 
+--- SCAN: after_rdp_nla_off at 11:03:28.94 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                FAIL   1                '0'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_rdp_nla_off_DESKTOP-C2474TM_20261020T180409Z.json
+ 
+--- SCAN: rollback_rdp_nla at 11:04:13.24 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_rdp_nla_DESKTOP-C2474TM_20261020T180451Z.json
+ 
+ 
+============================================================ 
+SCENARIO 10 - Password Complexity Disabled 
+============================================================ 
+ 
+--- SCAN: before_complex at 11:04:52.32 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_complex_DESKTOP-C2474TM_20261020T180530Z.json
+ 
+--- SCAN: after_complex_on at 11:05:38.69 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           PASS   1                '1'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 10, 'FAIL': 4, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_complex_on_DESKTOP-C2474TM_20261020T180616Z.json
+ 
+--- SCAN: rollback_complex at 11:06:20.27 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_complex_DESKTOP-C2474TM_20261020T180659Z.json
+ 
+ 
+============================================================ 
+SCENARIO 11 - UAC Disabled (registry only) 
+============================================================ 
+ 
+--- SCAN: before_uac at 11:07:00.40 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\before_uac_DESKTOP-C2474TM_20261020T180739Z.json
+ 
+--- SCAN: after_uac_off at 11:07:42.53 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            FAIL   1                '0'
+
+Total: {'PASS': 8, 'FAIL': 6, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\after_uac_off_DESKTOP-C2474TM_20261020T180821Z.json
+ 
+--- SCAN: rollback_uac at 11:08:24.80 --- 
+RULE                       STATUS EXPECTED         OBSERVED
+------------------------------------------------------------------------------
+WIN-ACCT-LOCKOUT           FAIL   [1, 2, 3, 4, 5]  '10'
+WIN-DEFENDER-ENABLED       PASS   False            'False'
+WIN-FW-DOMAIN              PASS   True             'True'
+WIN-FW-PRIVATE             PASS   True             'True'
+WIN-FW-PUBLIC              PASS   True             'True'
+WIN-GUEST-DISABLED         PASS   False            'False'
+WIN-LMHASH-DISABLED        PASS   [0, '0']         '1'
+WIN-PASS-COMPLEX           FAIL   1                '0'
+WIN-PASS-MINLEN            FAIL   14               '0'
+WIN-RDP-NLA                PASS   1                '1'
+WIN-REMOTEREG-DISABLED     PASS   4                '4'
+WIN-SCREENLOCK-TIMEOUT     FAIL   ^([1-9]\d?|[1-8  None
+WIN-SMB1-DISABLED          FAIL   Disabled         'Enabled'
+WIN-UAC-ENABLED            PASS   1                '1'
+
+Total: {'PASS': 9, 'FAIL': 5, 'ERROR': 0, 'NOT_APPLICABLE': 0}
+Disimpan: C:\geothread\scanner-cis\results\rollback_uac_DESKTOP-C2474TM_20261020T180902Z.json
+ 
+ 
+============================================================ 
+SKIPPED SCENARIOS 
+============================================================ 
+ 
+ 
+============================================================ 
+SUMMARY 
+============================================================ 
+ 
+============================================================ 
+Finished: Tue 10/20/2026 11:09:11.72 
+============================================================ 

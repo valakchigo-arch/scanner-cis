@@ -1,0 +1,470 @@
+{
+  "label": "after_remotereg_on",
+  "hostname": "DESKTOP-C2474TM",
+  "os": "Windows-10-10.0.19045-SP0",
+  "is_admin": true,
+  "timestamp": "20261020T175545Z",
+  "counts": {
+    "PASS": 8,
+    "FAIL": 6,
+    "ERROR": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "findings": [
+    {
+      "finding_id": "live-after_remotereg_on-001",
+      "control_id": "WIN-ACCT-LOCKOUT",
+      "title": "Account Lockout Threshold 1 to 5 Attempts",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:13.022395+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.2.2 (L1)",
+        "level": "L1"
+      },
+      "description": "Account lockout must trigger after 1-5 failed logon attempts. Value 0 means \"never lock\" which allows unlimited brute-force attempts and must FAIL. Values greater than 5 also fail this control.\n",
+      "comparison": {
+        "operator": "in",
+        "expected": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "actual": "10"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "$t = Join-Path $env:TEMP ('secpol_' + [guid]::NewGuid().ToString('N') + '.inf')\ntry {\n  secedit /export /cfg $t /quiet | Out-Null\n  if ($LASTEXITCODE -ne 0) { throw \"secedit gagal (exit $LASTEXITCODE) - butuh Administrator\" }\n  $m = Select-String -Path $t -Pattern '^LockoutBadCount\\s*=\\s*(-?\\d+)'\n  if (-not $m) { throw 'LockoutBadCount tidak ditemukan pada hasil export' }\n  $m.Matches[0].Groups[1].Value\n} finally { Remove-Item $t -Force -ErrorAction SilentlyContinue }\n",
+        "observed": "10"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Windows Settings > Security Settings > Account Policies > Account Lockout Policy > \"Account lockout threshold\" = 5 or fewer (but not 0)."
+      },
+      "duration_ms": 2634,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-002",
+      "control_id": "WIN-DEFENDER-ENABLED",
+      "title": "Windows Defender Antivirus Enabled",
+      "category": "compromise_indicators",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:17.030327+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 18.10.43.10.3 (L1)",
+        "level": "L1"
+      },
+      "description": "Windows Defender real-time monitoring must be enabled. Note: command returns False when protection IS enabled (DisableRealtimeMonitoring=False).",
+      "comparison": {
+        "operator": "equals",
+        "expected": false,
+        "actual": "False"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "(Get-MpPreference).DisableRealtimeMonitoring",
+        "observed": "False"
+      },
+      "remediation": {
+        "action": "Enable Windows Defender real-time protection"
+      },
+      "duration_ms": 4008,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-003",
+      "control_id": "WIN-FW-DOMAIN",
+      "title": "Windows Firewall Domain Profile Enabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:22.624399+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.1.1 (L1)",
+        "level": "L1"
+      },
+      "description": "Windows Firewall must be enabled for the Domain profile to block unauthorized inbound connections on domain-joined endpoints.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": true,
+        "actual": "True"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-NetFirewallProfile -Name Domain | Select-Object -ExpandProperty Enabled",
+        "observed": "True"
+      },
+      "remediation": {
+        "action": "Enable Windows Firewall for Domain profile via Group Policy (Computer Configuration > Windows Settings > Security Settings > Windows Firewall with Advanced Security) or: Set-NetFirewallProfile -Name Domain -Enabled True"
+      },
+      "duration_ms": 5594,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-004",
+      "control_id": "WIN-FW-PRIVATE",
+      "title": "Windows Firewall Private Profile Enabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:28.523039+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.2.1 (L1)",
+        "level": "L1"
+      },
+      "description": "Windows Firewall Private profile must be enabled to block unauthorized inbound connections on private networks (work/home).",
+      "comparison": {
+        "operator": "equals",
+        "expected": true,
+        "actual": "True"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-NetFirewallProfile -Name Private | Select-Object -ExpandProperty Enabled",
+        "observed": "True"
+      },
+      "remediation": {
+        "action": "Enable Windows Firewall Private profile via Group Policy or netsh"
+      },
+      "duration_ms": 5898,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-005",
+      "control_id": "WIN-FW-PUBLIC",
+      "title": "Windows Firewall Public Profile Enabled",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:34.026192+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 9.3.1 (L1)",
+        "level": "L1"
+      },
+      "description": "Windows Firewall Public profile must be enabled to block unauthorized inbound connections on public networks.",
+      "comparison": {
+        "operator": "equals",
+        "expected": true,
+        "actual": "True"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-NetFirewallProfile -Name Public | Select-Object -ExpandProperty Enabled",
+        "observed": "True"
+      },
+      "remediation": {
+        "action": "Enable Windows Firewall Public profile via Group Policy or netsh"
+      },
+      "duration_ms": 5504,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-006",
+      "control_id": "WIN-GUEST-DISABLED",
+      "title": "Guest Account Disabled",
+      "category": "authentication",
+      "status": "PASS",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:35.766313+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.1.2 (L1)",
+        "level": "L1"
+      },
+      "description": "Built-in Guest account must be disabled to prevent anonymous access.",
+      "comparison": {
+        "operator": "equals",
+        "expected": false,
+        "actual": "False"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "(Get-LocalUser -Name 'Guest' -ErrorAction SilentlyContinue).Enabled",
+        "observed": "False"
+      },
+      "remediation": {
+        "action": "Disable Guest account via 'Local Users and Groups' or net user"
+      },
+      "duration_ms": 1741,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-007",
+      "control_id": "WIN-LMHASH-DISABLED",
+      "title": "LM Hash Storage Disabled",
+      "category": "cryptography",
+      "status": "PASS",
+      "severity": "HIGH",
+      "confidence": "INFERRED",
+      "timestamp": "2026-10-20T17:55:35.766313+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.11.5 (L1)",
+        "level": "L1"
+      },
+      "description": "LM hash must be disabled. NoLMHash=1 or missing key (modern Windows default) = PASS. NoLMHash=0 = LM hash enabled = FAIL.",
+      "comparison": {
+        "operator": "not_in",
+        "expected": [
+          0,
+          "0"
+        ],
+        "actual": "1"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa",
+        "key": "NoLMHash",
+        "observed": "1",
+        "method": "winreg"
+      },
+      "remediation": {
+        "action": "Set NoLMHash to 1 in registry to explicitly disable LM hash storage"
+      },
+      "duration_ms": 0,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-008",
+      "control_id": "WIN-PASS-COMPLEX",
+      "title": "Password Complexity Enabled",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:38.508044+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.1.5 (L1)",
+        "level": "L1"
+      },
+      "description": "Password complexity must be enabled to require mixed character sets. On domain-joined machines, secedit reflects the effective (domain) policy. On standalone machines, it reflects local policy. Single source of truth.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": 1,
+        "actual": "0"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "$t = Join-Path $env:TEMP ('secpol_' + [guid]::NewGuid().ToString('N') + '.inf')\ntry {\n  secedit /export /cfg $t /quiet | Out-Null\n  if ($LASTEXITCODE -ne 0) { throw \"secedit gagal (exit $LASTEXITCODE) - butuh Administrator\" }\n  $m = Select-String -Path $t -Pattern '^PasswordComplexity\\s*=\\s*(-?\\d+)'\n  if (-not $m) { throw 'PasswordComplexity tidak ditemukan pada hasil export' }\n  $m.Matches[0].Groups[1].Value\n} finally { Remove-Item $t -Force -ErrorAction SilentlyContinue }\n",
+        "observed": "0"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Windows Settings > Security Settings > Account Policies > Password Policy > \"Password must meet complexity requirements\" = Enabled."
+      },
+      "duration_ms": 2740,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-009",
+      "control_id": "WIN-PASS-MINLEN",
+      "title": "Minimum Password Length 14 Characters or More",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:41.130901+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.1.4 (L1)",
+        "level": "L1"
+      },
+      "description": "Minimum password length must be at least 14 characters to resist brute-force and dictionary attacks. Value is read from the effective local security policy via secedit export.\n",
+      "comparison": {
+        "operator": "gte",
+        "expected": 14,
+        "actual": "0"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "$t = Join-Path $env:TEMP ('secpol_' + [guid]::NewGuid().ToString('N') + '.inf')\ntry {\n  secedit /export /cfg $t /quiet | Out-Null\n  if ($LASTEXITCODE -ne 0) { throw \"secedit gagal (exit $LASTEXITCODE) - butuh Administrator\" }\n  $m = Select-String -Path $t -Pattern '^MinimumPasswordLength\\s*=\\s*(-?\\d+)'\n  if (-not $m) { throw 'MinimumPasswordLength tidak ditemukan pada hasil export' }\n  $m.Matches[0].Groups[1].Value\n} finally { Remove-Item $t -Force -ErrorAction SilentlyContinue }\n",
+        "observed": "0"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Windows Settings > Security Settings > Account Policies > Password Policy > \"Minimum password length\" = 14 or more. Or via secedit /configure with a custom INF."
+      },
+      "duration_ms": 2623,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-010",
+      "control_id": "WIN-RDP-NLA",
+      "title": "RDP Network Level Authentication Required",
+      "category": "network_security",
+      "status": "PASS",
+      "severity": "CRITICAL",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:41.130901+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 18.10.57.3.9.4 (L1)",
+        "level": "L1"
+      },
+      "description": "RDP must require Network Level Authentication (NLA) to prevent unauthenticated access to the login screen and reduce RDP attack surface.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": 1,
+        "actual": "1"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp",
+        "key": "UserAuthentication",
+        "observed": "1",
+        "method": "winreg"
+      },
+      "remediation": {
+        "action": "Set via Group Policy: Computer Configuration > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host > Security > \"Require user authentication for remote connections by using Network Level Authentication\" = Enabled. Or set registry UserAuthentication = 1."
+      },
+      "duration_ms": 0,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-011",
+      "control_id": "WIN-REMOTEREG-DISABLED",
+      "title": "Remote Registry Service Disabled",
+      "category": "services",
+      "status": "FAIL",
+      "severity": "MEDIUM",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:41.130901+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 5.26 (L2)",
+        "level": "L2"
+      },
+      "description": "Remote Registry service allows remote modification of registry. Should be set to Disabled (Start=4) unless explicitly required for administration.\n",
+      "comparison": {
+        "operator": "equals",
+        "expected": 4,
+        "actual": "2"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RemoteRegistry",
+        "key": "Start",
+        "observed": "2",
+        "method": "winreg"
+      },
+      "remediation": {
+        "action": "Set service to Disabled: Set-Service -Name RemoteRegistry -StartupType Disabled Or: sc.exe config RemoteRegistry start= disabled"
+      },
+      "duration_ms": 0,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-012",
+      "control_id": "WIN-SCREENLOCK-TIMEOUT",
+      "title": "Interactive Logon: Machine Inactivity Limit Set to 1-900 Seconds",
+      "category": "authentication",
+      "status": "FAIL",
+      "severity": "MEDIUM",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:41.132434+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.7.4 (L1)",
+        "level": "L1"
+      },
+      "description": "The machine inactivity limit must trigger a screen lock within 15 minutes (900 seconds). The probe reads the effective machine-wide policy value InactivityTimeoutSecs under HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System.\nBoundary semantics (verified by test, see tests/rules/test_win_screenlock_timeout.py): - 0 is NOT acceptable \u2014 it means \"no limit\" \u2014 so the regex deliberately\n  rejects 0. The previous `lte 900` operator accepted 0 (True <= 900).\n- 1..900 = PASS; 901+ = FAIL; key absent = FAIL (unconfigured).\nSCOPE NOTE: this is the MACHINE-WIDE (HKLM) policy key. The earlier rule read HKCU\\Control Panel\\Desktop\\ScreenSaveTimeOut, which is per-user and was verified responsive on live machines (1800 readable). It was replaced because (a) CIS 2.3.7.4 names the machine inactivity limit, and (b) HKCU reflects only the account running the scanner, not the policy applied to other users. Baseline machines where the key is absent report FAIL, which is the correct finding for an unconfigured control.",
+      "comparison": {
+        "operator": "matches",
+        "expected": "^([1-9]\\d?|[1-8]\\d\\d|900)$",
+        "actual": null,
+        "display": "1 to 900 seconds (0 = disabled is NOT compliant)"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "key": "InactivityTimeoutSecs",
+        "observed": null,
+        "note": "value_not_present",
+        "method": "winreg"
+      },
+      "remediation": {
+        "action": "Set \"Interactive logon: Machine inactivity limit\" to 900 seconds or less via Group Policy (Computer Configuration > Administrative Templates > Windows Components > Windows Logon Options) or set registry HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\InactivityTimeoutSecs to a value in 1..900.\n"
+      },
+      "duration_ms": 0,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-013",
+      "control_id": "WIN-SMB1-DISABLED",
+      "title": "SMBv1 Protocol Disabled",
+      "category": "network_security",
+      "status": "FAIL",
+      "severity": "CRITICAL",
+      "confidence": "INFERRED",
+      "timestamp": "2026-10-20T17:55:45.629040+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 18.4.2 + 18.4.3 (L1)",
+        "level": "L1"
+      },
+      "description": "SMBv1 is deprecated and vulnerable (EternalBlue, WannaCry). The feature must be disabled on all endpoints.\nCONFIDENCE = INFERRED (mechanism deviation, verified by code inspection not by live run): CIS 18.4.2 audits the service start type `mrxsmb10` (registry HKLM\\SYSTEM\\CurrentControlSet\\Services\\mrxsmb10\\Start = 4) and CIS 18.4.3 audits `LanmanServer\\Parameters\\SMB1` (= 0). This rule instead reads the authoritative Windows optional-feature state via `Get-WindowsOptionalFeature -FeatureName SMB1Protocol`. The two mechanisms are not identical: a machine can have the feature *installed but the server parameter disabled*, or vice-versa, so a PASS here does not guarantee the CIS registry probes would also PASS. Treated as INFERRED until both probes are run and compared on the same host.\nDecision recorded (P0-3): option (a) chosen over adding two registry-derived rules. Reason: (1) the shipped rule set is contractually 14 controls (test_all_shipped_rules_load_and_are_unique, contract_adapter, docs katalog); adding a 15th rule mid-hardening would require touching all those counts, (2) `Get-WindowsOptionalFeature` is the single source of truth for whether the SMB1 feature is present, which is what an operator would actually toggle, and (3) the deviation from CIS mechanism is already documented here so the limitation is visible rather than hidden. Option (b) (two registry rules for mrxsmb10:Start and LanmanServer\\Parameters:SMB1) remains available if the project owner wants direct registry parity with CIS 18.4.2/18.4.3.",
+      "comparison": {
+        "operator": "equals",
+        "expected": "Disabled",
+        "actual": "Enabled"
+      },
+      "evidence": {
+        "source": "powershell",
+        "command": "Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol | Select-Object -ExpandProperty State",
+        "observed": "Enabled"
+      },
+      "remediation": {
+        "action": "Disable SMBv1 via 'Turn Windows features on or off' or PowerShell: Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol"
+      },
+      "duration_ms": 4497,
+      "error_detail": null
+    },
+    {
+      "finding_id": "live-after_remotereg_on-014",
+      "control_id": "WIN-UAC-ENABLED",
+      "title": "User Account Control (UAC) Enabled",
+      "category": "authorization",
+      "status": "PASS",
+      "severity": "HIGH",
+      "confidence": "DIRECT",
+      "timestamp": "2026-10-20T17:55:45.629977+00:00",
+      "standard": {
+        "name": "CIS",
+        "reference": "CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 2.3.17.6 (L1)",
+        "level": "L1"
+      },
+      "description": "UAC must be enabled (EnableLUA=1) to enforce privilege separation and prevent unauthorized elevation.",
+      "comparison": {
+        "operator": "equals",
+        "expected": 1,
+        "actual": "1"
+      },
+      "evidence": {
+        "source": "registry",
+        "path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+        "key": "EnableLUA",
+        "observed": "1",
+        "method": "winreg"
+      },
+      "remediation": {
+        "action": "Set EnableLUA to 1 in registry or via Group Policy"
+      },
+      "duration_ms": 0,
+      "error_detail": null
+    }
+  ]
+}
