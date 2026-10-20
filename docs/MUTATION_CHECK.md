@@ -112,3 +112,43 @@ secara eksplisit gagal saat fix di-revert** dan **lulus saat fix di-restore**.
 *Dokumen ini disusun untuk audit formal Fase B1–B3 + B7. Fase B4–B6 (live
 evaluation, ground truth, timeout regression) memerlukan Windows host fisik
 dan VM berSnapshot, akan dilaksanakan pada sesi terpisah.*
+
+---
+
+# Addendum v3: koreksi, basis pembanding, dan keterbatasan
+
+Ditambahkan setelah tinjauan independen atas patch v3. Tujuannya membuat klaim di dokumen ini sama dengan kenyataan.
+
+## 1. Dua basis pembanding (jangan dicampur)
+- **`orig`** = ZIP `clear_scanner_patch_v2` (keadaan **sebelum** Fase A). ZIP ini tidak memuat `.git`, sehingga penulis patch tidak dapat memetakannya ke hash komit tertentu.
+  Bila ingin memastikan, jalankan di repo Anda: `git show <komit-awal>:scanner/core/rule_model.py | Select-String display` (tidak boleh ada hasil).
+- **`pre`** = ZIP `scanner_clear` terbaru milik pemilik project, **sebelum** patch v3 (sudah berisi P0-1 s.d. P0-3).
+Setiap perbaikan diukur terhadap keadaan **tepat sebelum perbaikan itu**:
+
+| perbaikan | basis | hasil test pembuktian | label |
+|---|---|---|---|
+| P0-1/P0-2/P0-3, string terlarang (test milik pemilik) | `orig` | 12 gagal, 121 lulus pada 6 berkas test | [VERIFIED] |
+| `Condition.display` (3 test non-vacuous) | `orig` | 3 gagal, 3 lulus | [VERIFIED] |
+| `Condition.display` (seluruh `test_condition_display.py`) | `pre` | 5 gagal, 1 lulus | [VERIFIED] |
+| bat tanpa definisi variabel (`test_repo_hygiene.py`) | `pre` | 1 gagal (bat rusak terdeteksi: `LOG`, `PYTHON`, `RESULTS`, `SCENARIOS`) | [VERIFIED] |
+| bat + summarizer + guard (`test_bat_tools.py`) | `pre` | 12 gagal, 13 lulus | [VERIFIED] |
+| harness baru | `pre` | modul `tools` belum ada (error koleksi); 11/11 mutan ditangkap | [VERIFIED] |
+
+## 2. Koreksi atas hasil yang sempat dilaporkan
+`test_condition_display.py` sempat dilaporkan "3 passed" terhadap `orig`. Hasil itu **benar tetapi menyesatkan**: `orig` belum punya rule `matches`,
+sehingga dua test berjalan *vacuous* (tidak ada yang bisa dilanggar). Bug kebocoran regex hanya ada setelah P0-2, yaitu di `pre`. Test diperkuat dengan
+tiga test unit yang tidak bergantung pada rule yang dikirim (adapter, loader, emitter); sekarang gagal di `orig` dan `pre`.
+
+## 3. Celah cakupan: 9 test harness lama lulus walau harness inti rusak
+Sembilan test di `tests/test_scenario_harness.py` (keadaan `pre`) semua hijau, padahal `ScenarioRunner` tidak dapat memvalidasi kontrol non-registry.
+Penyebab: test menjalankan `ScenarioRunner` hanya dengan `DictTarget` (simulasi in-memory), sedangkan jalur secedit hanya diuji sebagai **unit** `CompositeTarget`
+(`write` lalu `read` langsung), bukan lewat `ScenarioRunner._scan()`. Cacat ditemukan lewat eksperimen manual (target secedit palsu: skenario `complexity_1_pass` menghasilkan `detected=False`,
+dan rollback menulis `None`), bukan lewat test suite. Pelajaran: test keberadaan/unit method ≠ perilaku end-to-end. Harness itu diganti `tools/scenario_harness.py`.
+
+## 4. Keterbatasan penjaga string terlarang (`tests/test_forbidden_strings.py`)
+- `docs/MUTATION_CHECK.md` dan direktori `archive/` **dikecualikan** dari pemindaian (dokumen ini memang menyebut string yang dihapus). Akibatnya penjaga ini tidak melindungi dokumen tersebut; perubahan isinya harus ditinjau manual.
+- Penjaga ini pencocokan string, bukan pemeriksaan klaim. Menulis fakta host uji sebagai "Win11" (bukan "Windows 11") lolos dari pemindai; itu disengaja karena yang dilarang adalah **klaim cakupan**, sedangkan fakta host uji dan ketidakcocokan dengan basis benchmark justru wajib ditulis
+  (lihat METHODOLOGY §7 butir 9). Penjaga tidak menggantikan tinjauan manusia.
+
+## 5. Status verifikasi
+Semua hasil di atas dihasilkan di Linux. Perilaku pada Windows nyata **[NOT RUN]**.

@@ -40,6 +40,8 @@ def emit_finding(
         "evidence": dict(evidence),
         "remediation": rule.remediation,
     }
+    if getattr(rule.condition, "display", ""):
+        finding["comparison"]["display"] = rule.condition.display
     if error_detail:
         # Alasan ERROR/NOT_APPLICABLE dipertahankan (sebelumnya dibuang executor).
         finding["error_detail"] = error_detail

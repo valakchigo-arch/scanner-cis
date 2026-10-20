@@ -1,55 +1,46 @@
-# Daftar file yang diubah/ditambahkan (FASE A)
+# Patch v3 (rev 2): daftar file (REPLACE / NEW / TINDAKAN)
 
-## REPLACE (timpa)
-- rules/windows/win-acct-lockout.yaml — ubah standard.reference ke CIS Microsoft Windows 10 Enterprise Benchmark v4.0.0, 1.2.2 (L1); tambahkan level: L1; severity tetap HIGH
-- rules/windows/win-defender-enabled.yaml — standard.reference v4.0.0, 18.10.43.10.3 (L1); severity: CRITICAL di top-level; level L1
-- rules/windows/win-fw-domain.yaml — v4.0.0, 9.1.1 (L1); severity CRITICAL; level L1
-- rules/windows/win-fw-private.yaml — v4.0.0, 9.2.1 (L1); severity CRITICAL; level L1
-- rules/windows/win-fw-public.yaml — v4.0.0, 9.3.1 (L1); severity CRITICAL; level L1
-- rules/windows/win-guest-disabled.yaml — v4.0.0, 2.3.1.2 (L1); severity HIGH; level L1
-- rules/windows/win-lmhash-disabled.yaml — v4.0.0, 2.3.11.5 (L1); severity HIGH; confidence INFERRED; level L1
-- rules/windows/win-pass-complex.yaml — v4.0.0, 1.1.5 (L1); severity HIGH; level L1
-- rules/windows/win-pass-minlen.yaml — v4.0.0, 1.1.4 (L1); severity HIGH; level L1
-- rules/windows/win-rdp-nla.yaml — v4.0.0, 18.10.57.3.9.4 (L1); severity CRITICAL; level L1
-- rules/windows/win-remotereg-disabled.yaml — v4.0.0, 5.26 (L2); severity MEDIUM; level L2
-- rules/windows/win-screenlock-timeout.yaml — **P0-2** ganti probe ke HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System:InactivityTimeoutSecs; condition operator matches dengan regex `^([1-9]\\d?|[1-8]\\d\\d|900)$` (menolak 0); reference v4.0.0, 2.3.7.4 (L1); level L1; deskripsi diperbarui (machine-wide, boundary documented)
-- rules/windows/win-smb1-disabled.yaml — **P0-3** standard.reference v4.0.0, 18.4.2 + 18.4.3 (L1); level L1; confidence INFERRED; description mencatat mekanisme berbeda vs CIS registry
-- rules/windows/win-uac-enabled.yaml — v4.0.0, 2.3.17.6 (L1); severity HIGH; level L1
-- tests/regression/test_bug_regressions.py — update test untuk mencerminkan pergeseran screenlock ke path HKLM + regex
-- docs/VALIDATION_RESULTS.md — hapus klaim Windows 11 (build 26200) → Windows 10
-- docs/METHODOLOGY.md — hapus klaim Windows 11 → Windows 10 (2 lokasi)
+Diterapkan **di atas** repo `scanner_clear` (285 passed, 2 skipped sebelum patch). Sesudah patch: **340 passed, 2 skipped** [VERIFIED: pytest, Linux].
+Arsitektur beacon/n8n/backend tidak diubah; kunci kontrak v2 (finding dan meta) identik [VERIFIED].
 
-## NEW (tambahkan)
-- tests/probe_evaluator_behavior.py — snapshot perilaku evaluator (null/empty/wrong-type)
-- tests/test_evaluator_null_semantics.py — **P1-1** pinning tests untuk semantik null evaluator
-- tests/rules/test_win_screenlock_timeout.py — **P0-2** boundary tests (0/1/600/900/901/1800/None, path, regex, reference format)
-- tests/rules/test_win_smb1_disabled.py — **P0-3** tests (Disabled/Enabled/Offline/None, INFERRED, reference format, probe command)
-- tests/scenario_harness.py — **P1-2/P1-3** data-driven scenario harness (Target, DictTarget, Scenario, ScenarioRunner, default_scenarios) dengan rejection no-op, rollback verification, spurious-flip tracking, reports JSON+MD
-- tests/test_scenario_harness.py — Linux-safe tests untuk harness (P1-2)
+## REPLACE
+| file | alasan | pembuktian |
+|---|---|---|
+| `scanner/core/rule_model.py`, `rule_loader.py`, `finding_emitter.py`, `contract_adapter.py` | `Condition.display` opsional: regex `matches` tidak lagi bocor ke `recommended_value` (dashboard/AI). **Di luar daftar Gate A, lihat Addendum** | `tests/rules/test_condition_display.py` (gagal: `orig` 3, `pre` 5) |
+| `rules/windows/win-screenlock-timeout.yaml` | tambah `display`; judul tidak lagi menyiratkan nilai 0 lolos | idem |
+| `run_scenarios.bat` | **diperbaiki, bukan dihapus**: blok persiapan hilang ditulis ulang (variabel + cek admin), blok Skenario 1 dipindah setelah baseline, baris `rollback_screenlockREM` dipisah, guard baseline sebelum perubahan apa pun, Skenario 10 membaca dengan `Select-String` dan menulis INF `-Encoding Unicode` (`findstr` tidak andal pada UTF-16), CRLF | `tests/test_bat_tools.py`, `tests/test_repo_hygiene.py` |
+| `summarize_scenarios.py` | **ditulis ulang**: label file bat (`after_screenlock_1800.json`) sebelumnya dipotong jadi `after` (skenario saling menimpa, "Expected changes" kosong diam-diam, rollback berlabel 2+ underscore dilewati); sekarang membandingkan (status, nilai) semua kontrol | `tests/test_bat_tools.py` (12 gagal pada versi lama) |
+| `docs/METHODOLOGY.md` | tabel semantik evaluator (dihasilkan dari kode), ancaman validitas 9-17, dua jalur live; koreksi "3 host Win11" menjadi 2 mesin | `tests/test_methodology_sync.py` |
+| `docs/MUTATION_CHECK.md` | **addendum** (isi lama tidak diubah): basis pembanding, koreksi hasil vacuous, celah cakupan 9 test lama, keterbatasan allowlist | - |
+| `tests/test_scenario_harness.py` | menguji harness baru (32 test; Windows palsu + rule YAML asli) | 11/11 mutan ditangkap |
+| `FILES.md`, `TEST_REPORT.md` | versi lama basi | - |
 
-## SUMMARY
-Total: 17 file modified/added (15 rules updated + 3 docs/tests updated + 6 new test/harness files). pytest: **278 passed, 0 failed** (≥223). No forbidden strings "Server 2019"/"CIS Windows Server" in rules (verified via updated references). Gate A passed. Phase B (live Windows validation B1–B7) belum dijalankan di lingkungan ini (memerlukan Windows + admin + snapshot).
-
-## NEW (Fase A + B)
-- `tests/test_forbidden_strings.py` — Gate A criterion 2 (forbidden-string guard)
-- `tests/test_cis_references.py` — B3 exact-match reference mapping (14 rules)
-- `docs/MUTATION_CHECK.md` — B2 mutation evidence (4 mutations, RED→GREEN)
-- `tests/scenario_harness.py` — P1-2 data-driven scenario runner
-- `tests/test_scenario_harness.py` — P1-2 harness tests
-- `archive/architecture-pre-v4.md` — historical pre-v4.0.0 architecture dump
-
-## REPLACE (Fase A)
-- `rules/windows/win-screenlock-timeout.yaml` — P0-2 (HKLM InactivityTimeoutSecs + matches)
-- `rules/windows/win-smb1-disabled.yaml` — P0-3 (confidence INFERRED)
-- `rules/windows/*.yaml` (12 files) — P0-1 (reference v4.0.0)
-- `docs/METHODOLOGY.md` — P2 (tabel rule + Win11 → Host-A)
-- `docs/VALIDATION_RESULTS.md` — P2 (hostname anonim)
-- `pytest.ini` — `--import-mode=importlib` (fix module collision)
-- `scanner/core/evaluator.py` — P1-1 (None guard untuk matches/contains)
-- `.gitignore` — `tmp/`, `__pycache__/`, `*.pyc`
+## NEW
+`tools/__init__.py`, `tools/scenario_harness.py`, `tools/semantics_matrix.py`, `tools/bat_baseline_guard.py`, `scenarios/windows_scenarios.yaml` (19 skenario),
+`tests/rules/test_condition_display.py`, `tests/test_repo_hygiene.py`, `tests/test_methodology_sync.py`, `tests/test_bat_tools.py`, `docs/B4_RUNBOOK.md`.
 
 ## TINDAKAN
-- `scanner/tests/__init__.py` — dihapus (fix module collision)
-- `docs/architecture.md` — dipindah ke `archive/architecture-pre-v4.md`
-- `tmp/` — untracked dari git
-- `DEPRECATED/` — di-track (aman, hanya placeholder; rekomendasi untrack setelah Fase B selesai)
+- **Hapus hanya** `tests/scenario_harness.py`: `_scan()` memasang mock probe secara permanen (provider asli tidak dipulihkan); `CompositeTarget` memakai `DictTarget` untuk registry (tidak pernah menyentuh registry nyata); rollback pada target non-registry menulis `None`. Terbukti eksperimen: `complexity_1_pass` → `detected=False`.
+- **Tidak dihapus**: `run_scenarios.bat`, `summarize_scenarios.py` (dipertahankan sebagai jalur validasi kedua; mekanismenya berbeda dari harness sehingga bisa saling menguji).
+- Opsional: `archive/architecture-pre-v4.md` memuat username/URL GitHub; anonimkan bila skripsi memerlukannya.
+
+## Kepatuhan terhadap ROLE (per item, jujur)
+| item | status |
+|---|---|
+| P0-1, P0-2, P0-3 | dikerjakan pemilik project (mutation check nyata: 12 test gagal pada `orig`); patch ini hanya menambah `display` pada P0-2 |
+| P1-1 | **test lock-in sudah ada dan sesuai spec** (`tests/test_evaluator_null_semantics.py`, 37 test, milik pemilik project; 37/37 lulus pada `orig` karena memang tidak ada perubahan perilaku). `evaluator.py` identik dengan `orig`. **Dokumentasi tabel belum ada** sebelum patch ini (tabel kini ada di METHODOLOGY §9) |
+| P1-2, P1-3 | harness lama tidak memenuhi (tidak menguji probe nyata); diganti harness baru + 19 skenario (termasuk seluruh matriks P1-3). Eksekusi Windows **[NOT RUN]** |
+| P2 | ancaman validitas ditambah (METHODOLOGY §7 butir 9-17) |
+
+## Addendum: perubahan di luar daftar Gate A
+`Condition.display` (4 file inti + 1 rule) **tidak ada di daftar P0-P2**. Alasan: setelah P0-2, kondisi `matches` membuat `recommended_value` berisi regex mentah
+(`matches ^([1-9]\d?|[1-8]\d\d|900)$`) yang dikonsumsi dashboard dan AI BC (terverifikasi). Perubahannya aditif (default kosong), kunci kontrak v2 tidak berubah.
+Bila tidak diinginkan: hapus 4 perubahan inti, kembalikan rule, dan hapus `tests/rules/test_condition_display.py`. Patch ini **tidak** mengklaim "patuh penuh ROLE"; yang benar: P0-P2 + 1 addendum.
+Perubahan lain di luar daftar: `bat_baseline_guard.py` dan perbaikan bat/summarizer (diperlukan agar jalur validasi kedua dapat dipakai dengan aman).
+
+## Sengaja tidak dilakukan
+Test khusus nama file `run_harness.py`: redundan dan lebih lemah daripada penjaga umum (semua berkas sumber < 10 byte). Bukti penangkapan kini lewat pohon sintetik
+(`test_tiny_file_finder_catches_the_real_incident`: berkas 3 byte berisi BOM terdeteksi).
+
+## Belum dilakukan / [NOT RUN]
+B4 (live Windows), B5 (ground truth independen), B6 pada mesin nyata; eksekusi bat setelah perbaikan; seluruh perintah di `scenarios/windows_scenarios.yaml`. Lihat `docs/B4_RUNBOOK.md`.

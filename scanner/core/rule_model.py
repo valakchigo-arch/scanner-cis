@@ -29,6 +29,9 @@ VALID_OS = {"windows", "linux", "any"}
 class Condition:
     operator: str
     expected_value: Any
+    # Teks ramah-manusia untuk 'recommended_value' di kontrak beacon / dashboard / AI.
+    # Wajib dipakai bila expected_value berupa regex (operator 'matches'); kosong = pakai format otomatis.
+    display: str = ""
 
     def validate(self):
         if self.operator not in VALID_OPERATORS:

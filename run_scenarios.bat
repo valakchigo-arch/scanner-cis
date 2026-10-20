@@ -4,6 +4,43 @@ setlocal enabledelayedexpansion
 title GeoThread DJBC - Windows Scenario Testing
 
 REM ============================================================
+REM LEGACY / JALUR VALIDASI KEDUA (silang-uji dengan tools\scenario_harness.py)
+REM - Rollback di skrip ini HARD-CODED untuk baseline Windows default; guard di bawah menolak
+REM   mesin yang baseline-nya berbeda SEBELUM ada setelan yang diubah.
+REM - Jalankan sebagai Administrator, di VM yang sudah di-snapshot.
+REM ============================================================
+cd /d "%~dp0"
+set "ROOT=%CD%"
+set "PYTHON=%ROOT%\.venv\Scripts\python.exe"
+if not exist "%PYTHON%" set "PYTHON=python"
+set "RESULTS=%ROOT%\results"
+set "SCENARIOS=%RESULTS%\scenarios"
+if not exist "%SCENARIOS%" mkdir "%SCENARIOS%"
+set "LOG=%SCENARIOS%\_scenario_log.txt"
+
+net session >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Harus dijalankan sebagai Administrator.
+    pause
+    exit /b 1
+)
+echo Started: %date% %time% >> "%LOG%"
+
+REM ============================================================
+REM BASELINE
+REM ============================================================
+call :header "BASELINE"
+call :run_scan baseline
+
+REM ---- GUARD: rollback skrip ini hard-coded untuk baseline default ----
+"%PYTHON%" tools\bat_baseline_guard.py "%SCENARIOS%\baseline.json"
+if errorlevel 1 (
+    echo [ABORT] Baseline BUKAN default: rollback hard-coded tidak aman. TIDAK ADA setelan yang diubah.
+    pause
+    exit /b 1
+)
+
+REM ============================================================
 REM SCENARIO 1 - Screen Lock (P0-2: HKLM InactivityTimeoutSecs)
 REM CIS 2.3.7.4 "Interactive logon: Machine inactivity limit"
 REM ============================================================
@@ -28,11 +65,7 @@ call :sleep
 call :run_scan after_screenlock_1
 reg delete "%SLKEY%" /v %SLVAL% /f >nul 2>&1
 call :sleep
-call :run_scan rollback_screenlockREM ============================================================
-REM BASELINE
-REM ============================================================
-call :header "BASELINE"
-call :run_scan baseline
+call :run_scan rollback_screenlock
 
 
 REM ============================================================
@@ -168,10 +201,15 @@ set SECPOL=%TEMP%\secpol_orig_complex.inf
 set SECPOL_MOD=%TEMP%\secpol_mod_complex.inf
 secedit /export /cfg "%SECPOL%" >nul 2>&1
 copy "%SECPOL%" "%SECPOL_MOD%" >nul 2>&1
-for /f "tokens=3" %%a in ('findstr /i "PasswordComplexity" "%SECPOL%"') do set ORIG_COMPLEX=%%a
+for /f %%a in ('powershell -NoProfile -Command "((Select-String -Path '%SECPOL%' -Pattern '^PasswordComplexity').Line -split '=')[1].Trim()"') do set ORIG_COMPLEX=%%a
+if not defined ORIG_COMPLEX (
+    echo [SKIP] Skenario 10: baseline PasswordComplexity tidak terbaca; dilewati tanpa mengubah apa pun.
+    del "%SECPOL%" "%SECPOL_MOD%" >nul 2>&1
+    goto :after_scenario10
+)
 echo [INFO] Complexity baseline = %ORIG_COMPLEX%
 echo [CHANGE] PasswordComplexity=1 via secedit
-powershell -Command "(Get-Content '%SECPOL_MOD%') -replace 'PasswordComplexity = %ORIG_COMPLEX%', 'PasswordComplexity = 1' | Set-Content '%SECPOL_MOD%'"
+powershell -Command "(Get-Content '%SECPOL_MOD%') -replace 'PasswordComplexity = %ORIG_COMPLEX%', 'PasswordComplexity = 1' | Set-Content -Encoding Unicode '%SECPOL_MOD%'"
 secedit /configure /db "%TEMP%\secedit_complex.sdb" /cfg "%SECPOL_MOD%" /areas SECURITYPOLICY >nul 2>&1
 call :sleep
 call :run_scan after_complex_on
@@ -182,6 +220,7 @@ del "%SECPOL%" "%SECPOL_MOD%" "%TEMP%\secedit_complex.sdb" >nul 2>&1
 call :sleep
 call :run_scan rollback_complex
 
+:after_scenario10
 REM ============================================================
 REM SCENARIO 11 - UAC (registry only, no reboot)
 REM ============================================================

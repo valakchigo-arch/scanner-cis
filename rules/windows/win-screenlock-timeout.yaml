@@ -1,5 +1,5 @@
 rule_id: WIN-SCREENLOCK-TIMEOUT
-title: "Interactive Logon: Machine Inactivity Limit <= 900 Seconds"
+title: "Interactive Logon: Machine Inactivity Limit Set to 1-900 Seconds"
 category: authentication
 os: windows
 standard:
@@ -11,6 +11,7 @@ confidence: DIRECT
 condition:
   operator: matches
   expected_value: "^([1-9]\\d?|[1-8]\\d\\d|900)$"
+  display: "1 to 900 seconds (0 = disabled is NOT compliant)"
 probe:
   provider: windows.registry
   params:

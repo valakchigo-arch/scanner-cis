@@ -26,6 +26,8 @@ _OP_TEXT = {"equals": "=", "not_equals": "!=", "gt": ">", "gte": ">=", "lt": "<"
 
 
 def _fmt_expected(cmp: dict) -> str:
+    if cmp.get("display"):          # rule menyediakan teks yang layak dibaca (mis. untuk regex)
+        return str(cmp["display"])
     op, exp = cmp.get("operator"), cmp.get("expected")
     if op in ("exists", "not_exists"):
         return _OP_TEXT[op]

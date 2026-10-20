@@ -40,6 +40,7 @@ def load_rule(path: str) -> Rule:
         condition = Condition(
             operator=raw["condition"]["operator"],
             expected_value=raw["condition"]["expected_value"],
+            display=str(raw["condition"].get("display") or ""),
         )
     except KeyError as e:
         raise RuleValidationError(
