@@ -133,3 +133,75 @@ Guest, RemoteRegistry, FW-Private, FW-Public, LMHash, RDP-NLA, UAC, Complexity (
 - Semua JSON di b4-evidence-20261020/ sudah di-replace DESKTOP-C2474TM ? Host-B
 - spool tidak path-traversal (sudah di test_bug_regressions.py)
 - payload contract v2 tetap kompatibel (field additif: tests_errored, errored_check_ids, coverage_percent)
+## B4 — Live Evaluation Host-B (Win10 22H2 VM) — 2026-10-20
+
+### Metrik
+- 38 scan (11 skenario × (before/after/rollback) + baseline)
+- **detection_rate: 11/11 (100%)**
+- **rollback_ok_rate: 11/11 (100%)**
+- **spurious_flips: 0**
+- **ERROR: 0/38**
+- **coverage_percent: 100%** di semua scan
+
+### P0-2 ScreenLock boundary live-validated
+| Value | Observed | Status | Yang dibuktikan |
+|---|---|---|---|
+| 1800 | '1800' | FAIL | >900 ditolak |
+| 901 | '901' | FAIL | boundary+1 ditolak |
+| 900 | '900' | PASS | boundary tepat diterima |
+| **0** | '0' | **FAIL** | **0="no limit" DITOLAK oleh regex** (bukan lolos seperti `lte 900` lama) |
+| 1 | '1' | PASS | minimum valid diterima |
+| rollback | None | FAIL | kembali ke baseline (key absent) |
+
+### Kontrol flip PASS?FAIL (9/9 restored)
+Guest, RemoteRegistry, FW-Private, FW-Public, LMHash, RDP-NLA, UAC, Complexity (0?1), ScreenLock.
+
+### Limitasi
+- 3 kontrol SKIPPED: FW-DOMAIN (butuh domain-joined), SMB1 (butuh reboot), Defender (tamper protection).
+- Hardcoded rollback di scenarios 2/3/8/9/11 — works karena baseline VM = default.
+
+---
+
+## B5 — Ground Truth Independen (Host-B) — 2026-10-21
+
+9 kontrol diverifikasi manual CLI vs scanner output:
+
+| Kontrol | Manual CLI | Scanner | Match |
+|---|---|---|---|
+| MinLen | `net accounts` ? 0 | 0/FAIL | ? |
+| Lockout | `net accounts` ? 10 | 10/FAIL | ? |
+| Complexity | `secedit` ? 0 | 0/FAIL | ? |
+| Lockout (secedit) | `LockoutBadCount = 10` | 10/FAIL | ? |
+| RDP-NLA | `reg query` ? 0x1 | 1/PASS | ? |
+| LMHash | `reg query` ? 0x1 | 1/PASS | ? |
+| FW-Domain/Private/Public | `Get-NetFirewallProfile` ? True | True/PASS | ? |
+| ScreenLock | `reg query` ? not found | None/FAIL | ? |
+
+**Verdict: 9/9 match.** Probe tidak memalsukan nilai.
+
+---
+
+## B6 — Timeout Regression — 2026-10-21
+
+### Test 1: run_rules_live.py dengan SCANNER_PROBE_TIMEOUT_SCALE=0.1
+- 7 ERROR (PowerShell timeout)
+- 5 PASS + 2 FAIL (winreg probe immune, secedit probe quick)
+- **ERROR bukan FAIL palsu** — 3-state model bekerja
+- winreg probe **tidak spawn PowerShell** ? tidak terkena timeout
+
+### Test 2: rule_scanner_windows.py --min-coverage 70 (production)
+- 5 kontrol ERROR (timeout) ? coverage = 9/14 = 64%
+- 64% < 70% ? **scan gagal, exit 1**
+- **Tidak kirim beacon**
+- Pesan error smart: "Mesin lambat? coba SCANNER_PROBE_TIMEOUT_SCALE=3"
+
+**Verdict: LULUS.** Timeout ? ERROR ? coverage < 70% ? refuse send.
+
+---
+
+## B7 — Keamanan — 2026-10-21
+
+- Select-String "N8N_WEBHOOK_SECRET|DESKTOP-C2474TM|VALAK" di docs\ dan rules\windows\ ? **kosong**
+- Semua JSON di b4-evidence-20261020/ sudah di-replace DESKTOP-C2474TM ? Host-B
+- spool tidak path-traversal (sudah di test_bug_regressions.py)
+- payload contract v2 tetap kompatibel (field additif: tests_errored, errored_check_ids, coverage_percent)
