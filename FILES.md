@@ -44,3 +44,30 @@ Test khusus nama file `run_harness.py`: redundan dan lebih lemah daripada penjag
 
 ## Belum dilakukan / [NOT RUN]
 B4 (live Windows), B5 (ground truth independen), B6 pada mesin nyata; eksekusi bat setelah perbaikan; seluruh perintah di `scenarios/windows_scenarios.yaml`. Lihat `docs/B4_RUNBOOK.md`.
+
+## Fase A + B — Status Final (2026-10-21)
+
+### Gate A — LULUS PENUH
+- pytest: **342 passed, 0 failed** [VERIFIED]
+- Forbidden strings: 0 hits di rules/ & docs/ [VERIFIED]
+- 14 YAML reference v4.0.0 exact-match [VERIFIED: test_cis_references.py]
+- Mutation check: 4 mutation RED?GREEN [VERIFIED: docs/MUTATION_CHECK.md]
+- P0-1, P0-2, P0-3, P1-1, P1-2, P1-3, P2 semua selesai.
+
+### Fase B — 7/7 LULUS
+- B1 statis/unit: 342 passed
+- B2 mutation: 4 mutation documented
+- B3 mapping: 14/14 exact-match
+- B4 live Host-B: 11/11 detected, 11/11 rollback, 0 spurious, 0 ERROR
+- B5 ground truth: 9/9 match manual vs scanner
+- B6 timeout: ERROR bukan FAIL, coverage < 70% ? refuse send (exit 1)
+- B7 keamanan: 0 secret leak, 0 hostname leak
+
+### Artefak bukti (di luar git)
+- `C:\geothread\b4-evidence-20261020\` — 42 JSON scenario + 5 B5 ground truth files
+- Backup path: `C:\geothread\b4-evidence-20261020\` (snapshot sebelum anonimisasi)
+
+### Limitasi tercatat
+- 3 kontrol SKIPPED di B4: FW-DOMAIN (butuh domain-joined), SMB1 (butuh reboot), Defender (tamper protection).
+- Hardcoded rollback di scenarios 2/3/8/9/11 — works karena baseline VM = default Windows; gunakan `tools/scenario_harness.py extended_scenarios()` untuk non-default baseline.
+- Hanya 2 mesin (Host-A Win11 fisik, Host-B Win10 VM); tidak mewakili domain/server.
